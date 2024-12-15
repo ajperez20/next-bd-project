@@ -22,16 +22,53 @@ export const AcmeLogo = () => {
   );
 };
 
-export default function NavbarComponent() {
-  const router = useRouter();
+const LoginNavbar = ({ router }) => {
   return (
-    <Navbar className="bg-slate-900">
-      <NavbarBrand>
-        <Link color="foreground" href="/">
-          <AcmeLogo />
-          <p className="font-bold text-inherit">UCABAIR</p>
-        </Link>
-      </NavbarBrand>
+    <>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <p className="text-md text-slate-500">No estás registrado?</p>
+        </NavbarItem>
+        <NavbarItem>
+          <Button
+            color="primary"
+            variant="flat"
+            onPress={() => {
+              router.push("/auth/signUp");
+            }}
+          >
+            Registrarse
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+    </>
+  );
+};
+
+export const SignUpNavbar = ({ router }) => {
+  return (
+    <>
+      <NavbarContent justify="end">
+        <NavbarItem className="hidden lg:flex">
+          <p className="text-md text-slate-500">Estás registrado?</p>
+        </NavbarItem>
+        <Button
+          color="primary"
+          variant="flat"
+          onPress={() => {
+            router.push("/auth/login");
+          }}
+        >
+          Iniciar Sesión
+        </Button>
+      </NavbarContent>
+    </>
+  );
+};
+
+const HomeNavbar = ({ router }) => {
+  return (
+    <>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="/home/avion/models">
@@ -51,20 +88,44 @@ export default function NavbarComponent() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="/home/login">Iniciar Sesión</Link>
+          <Link href="/auth/login">Iniciar Sesión</Link>
         </NavbarItem>
         <NavbarItem>
           <Button
             color="primary"
             variant="flat"
             onPress={() => {
-              router.push("/home/signUp");
+              router.push("/auth/signUp");
             }}
           >
             Registrarse
           </Button>
         </NavbarItem>
       </NavbarContent>
+    </>
+  );
+};
+
+export default function NavbarComponent({ navbar }) {
+  const router = useRouter();
+  return (
+    <Navbar className="bg-slate-900">
+      <NavbarBrand>
+        <Link color="foreground" href="/">
+          <AcmeLogo />
+          <p className="font-bold text-inherit">UCABAIR</p>
+        </Link>
+      </NavbarBrand>
+
+      {navbar === "login" ? (
+        <LoginNavbar router={router}></LoginNavbar>
+      ) : navbar === "home" ? (
+        <HomeNavbar router={router}></HomeNavbar>
+      ) : navbar === "signUp" ? (
+        <SignUpNavbar router={router}></SignUpNavbar>
+      ) : (
+        <div>Error</div>
+      )}
     </Navbar>
   );
 }

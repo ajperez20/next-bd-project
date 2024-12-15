@@ -15,7 +15,8 @@
     "next-db-project": "file:",
     "pg": "^8.13.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
