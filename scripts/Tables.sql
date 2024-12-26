@@ -245,7 +245,7 @@ CREATE TABLE ESTATUS_PMS (
 
 	CONSTRAINT pk_sms PRIMARY KEY (fk_est_id, fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id),
 	CONSTRAINT fk_pbm FOREIGN KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id) REFERENCES SEDE_MATERIAL_PRUEBA(fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id) ON DELETE CASCADE,
-	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
 );
 
 
@@ -260,11 +260,12 @@ CREATE TABLE FASE_ENSAMBLE_PIEZA (
     eez_fecha_fin DATE,
 	fk_esp_id INT NOT NULL,
 	fk_zon_id INT NOT NULL,
+	fk_mec_id INT NOT NULL,
 
 	CONSTRAINT pk_eez PRIMARY KEY (fk_esp_id, fk_zon_id),
-	CONSTRAINT fk_esp_id FOREIGN KEY (fk_esp_id) REFERENCES PROCESO_ENSAMBLE_PIEZA_EJEC (esp_id) ON DELETE CASCADE,
-	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA (zon_id) ON DELETE CASCADE
-	
+	CONSTRAINT fk_esp_id FOREIGN KEY (fk_esp_id) REFERENCES PROCESO_ENSAMBLE_PIEZA_EJEC(esp_id) ON DELETE CASCADE,
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_mec_id FOREIGN KEY (fk_mec_id) REFERENCES MODELO_PIEZA_CONF(mec_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ESTATUS_FEP (
@@ -276,7 +277,7 @@ CREATE TABLE ESTATUS_FEP (
 
 	CONSTRAINT pk_est_id PRIMARY KEY (fk_est_id,fk_esp_id, fk_zon_id),
 	CONSTRAINT fk_eez FOREIGN KEY (fk_esp_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_PIEZA(fk_esp_id, fk_zon_id) ON DELETE CASCADE,
-	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ENSAMBLE_SOLICITUD_MATERIA (
@@ -303,8 +304,36 @@ CREATE TABLE ESTATUS_SME (
 	fk_zon_id INT NOT NULL,
 
 	CONSTRAINT pk_sme PRIMARY KEY (fk_est_id, elm_id, fk_esp_id, fk_zon_id),
-	CONSTRAINT fk_elm FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_id) REFERENCES (elm_id, fk_esp_id, fk_zon_id) ON DELETE, 
-	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+	CONSTRAINT fk_elm FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_id) REFERENCES ENSAMBLE_SOLICITUD_MATERIA(elm_id, fk_esp_id, fk_zon_id) ON DELETE, 
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ENSAMBLE_MATERIAL_PRUEBA (
+    epr_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    epr_fecha_fin DATE,
+	epr_resultado_prueba VARCHAR(255) NOT NULL,
+	fk_pru_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_elm_id INT NOT NULL,
+	fk_esp_id INT NOT NULL, 
+	fk_zon_id INT NOT NULL,
+
+	CONSTRAINT pk_epr PRIMARY KEY (fk_pru_id, fk_zon_id),
+	CONSTRAINT fk_pru_id FOREIGN KEY (fk_pru_id) REFERENCES PRUEBA(pru_id) ON DELETE CASCADE,
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_elm FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_id) REFERENCES ENSAMBLE_SOLICITUD_MATERIA(elm_id, fk_esp_id, fk_zon_id) ON DELETE, 
+);
+
+CREATE TABLE ESTATUS_PPEM (
+    ppm_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    ppm_fecha_fin DATE,
+	fk_pru_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+	
+	CONSTRAINT pk_ppm PRIMARY KEY (fk_est_id, fk_pru_id, fk_zon_id),
+	CONSTRAINT fk_epr FOREIGN KEY (fk_pru_id, fk_zon_id) REFERENCES ENSAMBLE_MATERIAL_PRUEBA(fk_pru_id, fk_zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id)
 );
 
 
