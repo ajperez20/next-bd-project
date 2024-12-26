@@ -160,49 +160,170 @@ CREATE TABLE MATERIAL_FASE (
 	CONSTRAINT fk_mac_id FOREIGN KEY (fk_mac_id) REFERENCES MATERIAL_PIEZA_CONF(mac_id)
 );
 
+CREATE TABLE MATERIA_PRIMA (
+	rpm_id SERIAL PRIMARY KEY,
+	rpm_nombre VARCHAR(50) NOT NULL,
+	rpm_descripcion VARCHAR(70)
+);
 
 ----------------  Ejecución del proyecto-------------------------------------------
 CREATE TABLE SEDE_PLANTA (
-	sed_id SERIAL PRIMARY KEY,
-	sed_nombre VARCHAR(50) NOT NULL,
-	sed_direccion VARCHAR(70) NOT NULL,
-	sed_descripcion VARCHAR(70) NOT NULL,
+    sed_id SERIAL PRIMARY KEY, 
+    sed_nombre VARCHAR(100) NOT NULL, 
+    sed_direccion VARCHAR(200) NOT NULL, 
+    sed_descripcion VARCHAR(255),
 	fk_lug_id INT NOT NULL,
 	
-	CONSTRAINT fk_lug_id FOREIGN KEY (fk_lug_id) REFERENCES LUGAR(lug_id)
+    CONSTRAINT fk_lugar FOREIGN KEY (fk_lug_id) REFERENCES LUGAR(lug_id) ON DELETE CASCADE    
 );
 
 CREATE TABLE AREA (
-	are_id SERIAL PRIMARY KEY,
-	are_nombre VARCHAR(50) NOT NULL,
-	are_descripcion VARCHAR(70) NOT NULL,
-	fk_sed_id INT NOT NULL,
-
-	CONSTRAINT fk_sed_id FOREIGN KEY (fk_sed_id) REFERENCES SEDE_PLANTA(sed_id)
+    are_id SERIAL PRIMARY KEY,   
+    are_nombre VARCHAR(100) NOT NULL,  
+    are_descripcion VARCHAR(255),      
+    fk_sed_id INT NOT NULL, 
+	
+    CONSTRAINT fk_sede FOREIGN KEY (fk_sed_id) REFERENCES PLANTA(sed_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ZONA (
-	zon_id SERIAL PRIMARY KEY,
-	zon_nombre VARCHAR(50) NOT NULL,
-	zon_descripcion VARCHAR(70) NOT NULL,
-	fk_are_id INT NOT NULL,
-
-	CONSTRAINT fk_are_id FOREIGN KEY (fk_are_id) REFERENCES AREA(are_id)
+    zon_id SERIAL PRIMARY KEY,      
+    zon_nombre VARCHAR(100) NOT NULL,
+    zon_descripcion VARCHAR(255),
+    fk_are_id INT NOT NULL, 
+	
+    CONSTRAINT fk_area FOREIGN KEY (fk_are_id) REFERENCES AREA(are_id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE ESTATUS (
-	est_id SERIAL PRIMARY KEY,
-	est_tipo_estatus VARCHAR(50) NOT NULL,
-	est_descripcion VARCHAR(50) NOT NULL,
+    est_id SERIAL PRIMARY KEY,
+    est_tipo_estatus VARCHAR(50) NOT NULL, 
+    est_descripcion VARCHAR(255) NOT NULL 
 );
 
 CREATE TABLE PRUEBA (
-	pru_id SERIAL PRIMARY KEY,
-	pru_nombre VARCHAR(50) NOT NULL,
-	pru_tiempo_estimado INTERVAL NOT NULL,
-	pru_descripcion VARCHAR(70) NOT NULL
+    pru_id SERIAL PRIMARY KEY,           
+    pru_nombre VARCHAR(100) NOT NULL,    
+    pru_tiempo_estimado INTERVAL NOT NULL, 
+    pru_descripcion VARCHAR(255) NOT NULL 
 );
+
+CREATE TABLE MATERIA_PRIMA_STOCK (
+	mps_id SERIAL NOT NULL,
+	mps_unidad_medida VARCHAR(30) NOT NULL,
+	mps_cantidad_disponible INT NOT NULL,
+	fk_sed_id INT NOT NULL,
+	fk_rpm_id INT NOT NULL,
+
+	CONSTRAINT pk_mps PRIMARY KEY (fk_sed_id, fk_rom_id, mps_id),
+	CONSTRAINT fk_sed_id FOREIGN KEY (fk_sed_id) REFERENCES SEDE_PLANTA(sed_id) ON DELETE CASCADE,
+	CONSTRAINT fk_rpm_id FOREIGN KEY (fk_rpm_id) REFERENCES MATERIA_PRIMA(rpm_id) ON DELETE CASCADE
+);
+
+CREATE TABLE SEDE_MATERIAL_PRUEBA (
+    pbm_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    pbm_fecha_fin DATE,
+    pbm_resultado_prueba VARCHAR(255) NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_sed_id INT NOT NULL,
+	fk_rpm_id INT NOT NULL,
+	fk_mps_id INT NOT NULL,
+
+	CONSTRAINT pk_pbm PRIMARY KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id),
+	CONSTRAINT fk_mps FOREIGN KEY (fk_sed_id, fk_rpm_id, fk_mps_id) REFERENCES MATERIA_PRIMA_STOCK(fk_sed_id, fk_rpm_id, mps_id) ON DELETE CASCADE,
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ESTATUS_PMS (
+    sms_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    sms_fecha_fin DATE,
+	fk_est_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_sed_id INT NOT NULL,
+	fk_rpm_id INT NOT NULL,
+	fk_mps_id INT NOT NULL,
+
+	CONSTRAINT pk_sms PRIMARY KEY (fk_est_id, fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id),
+	CONSTRAINT fk_pbm FOREIGN KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id) REFERENCES SEDE_MATERIAL_PRUEBA(fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE PROCESO_ENSAMBLE_PIEZA_EJEC (
+	esp_id SERIAL PRIMARY KEY,
+	esp_tiempo_estimado INTERVAL NOT NULL,
+	esp_descripcion VARCHAR(255) NOT NULL,
+);
+
+CREATE TABLE FASE_ENSAMBLE_PIEZA (
+    eez_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    eez_fecha_fin DATE,
+	fk_esp_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+
+	CONSTRAINT pk_eez PRIMARY KEY (fk_esp_id, fk_zon_id),
+	CONSTRAINT fk_esp_id FOREIGN KEY (fk_esp_id) REFERENCES PROCESO_ENSAMBLE_PIEZA_EJEC (esp_id),
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA (zon_id)
+	
+);
+
+
+
+
+
+CREATE TABLE PROCESO_ENSAMBLE_AVION_EJEC (
+    eav_id SERIAL PRIMARY KEY, 
+    eav_tiempo_estimado INTERVAL NOT NULL, 
+    eav_descripcion VARCHAR(255) NOT NULL 
+);
+
+
+CREATE TABLE FASE_ENSAMBLE_AVION (
+    fln_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,         
+    fln_fecha_fin DATE,                       
+    fk_eav_id INT NOT NULL,                   
+    fk_mda_id INT NOT NULL,                   
+    fk_zon_id INT NOT NULL,       
+	
+    CONSTRAINT pk_fase_ensamble_avion PRIMARY KEY (fk_eav_id, fk_mda_id, fk_zon_id),
+    CONSTRAINT fk_proceso_avion FOREIGN KEY (fk_eav_id) REFERENCES PROCESO_ENSAMBLE_AVION_EJEC(eav_id) ON DELETE CASCADE,
+    CONSTRAINT fk_modelo_avion FOREIGN KEY (fk_mda_id) REFERENCES MODELO_AVION_CONF(mda_id) ON DELETE CASCADE,
+    CONSTRAINT fk_zona FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ESTATUS_FEA (
+	efa_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+	efa_fecha_fin DATE,
+	fk_eav_id INT NOT NULL,                   
+    fk_mda_id INT NOT NULL,                   
+    fk_zon_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+
+	CONSTRAINT pk_estatus_fea PRIMARY KEY (fk_eav_id, fk_mda_id, fk_zon_id, fk_est_id),
+	CONSTRAINT fk_fase_ensamble_avion FOREIGN KEY (fk_eav_id, fk_mda_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_AVION(fk_eav_id, fk_mda_id, fk_zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_estatus FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
+);
+
+
+
+
+
+--- revisar ----
+CREATE TABLE ENSAMBLE_SOLICITUD_PIEZA (
+    edz_id SERIAL PRIMARY KEY, 
+    edz_cantidad_piezas INT NOT NULL,
+	
+);
+---------------
+
+
+--- revisar ----
+CREATE TABLE AVION_CREADO (
+    avi_id SERIAL PRIMARY KEY,                
+    avi_num_serie VARCHAR(50) NOT NULL UNIQUE,
+    avi_fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,        
+);
+----------
 
 
 CREATE TABLE PIEZA_STOCK (
@@ -229,6 +350,24 @@ CREATE TABLE PRUEBA_PIEZA_SEDE (
 	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id),
 	CONSTRAINT fk_pru_id FOREIGN KEY (fk_pru_id) REFERENCES PRUEBA(pru_id)
 );
+
+CREATE TABLE ESTATUS_PPS (
+	ssp_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+	ssp_fecha_fin DATE,
+	fk_pie_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_pru_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+
+	CONSTRAINT pk_est_pps PRIMARY KEY (fk_pie_id, fk_zon_id, fk_pru_id, fk_est_id),
+	CONSTRAINT fk_psz FOREIGN KEY (fk_pie_id, fk_zon_id, fk_pru_id) REFERENCES PRUEBA_PIEZA_SEDE(fk_pie_id, fk_zon_id, fk_pru_id),
+	CONSTRAINT fk_est FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id)
+);
+
+
+
+
+
 
 CREATE TABLE SOLICITUD_SEDE (
 	sse_id SERIAL PRIMARY KEY,
@@ -265,17 +404,10 @@ CREATE TABLE ESTATUS_SOL_PIEZA (
 );
 
 
-CREATE TABLE PROCESO_ENSAMBLE_AVION_EJEC (
-	eav_id SERIAL PRIMARY KEY,
-	eav_tiempo_estimado INTERVAL NOT NULL,
-	eav_descripcion VARCHAR(70)
-);
 
-CREATE TABLE PROCESO_ENSAMBLE_PIEZA_EJEC (
-	esp_id SERIAL PRIMARY KEY,
-	esp_tiempo_estimado INTERVAL NOT NULL,
-	esp_descripcion VARCHAR(50) NOT NULL,
-);
+
+
+
 -----------------------------------------------------------------------------------------------
 
 
@@ -385,12 +517,6 @@ CREATE TABLE CLIENTE_JURIDICO (
 	cjd_descripcion VARCHAR(70) NOT NULL,
 	
 	CONSTRAINT cjd_rif CHECK (cjd_rif ~ '^[J]{1}[0-9]{9,10}$')
-);
-
-CREATE TABLE MATERIA_PRIMA (
-	rpm_id SERIAL PRIMARY KEY,
-	rpm_nombre VARCHAR(50) NOT NULL,
-	rpm_descripcion VARCHAR(70)
 );
 
 CREATE TABLE PROVEEDOR_MP_STOCK (
