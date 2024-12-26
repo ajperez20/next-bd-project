@@ -262,10 +262,51 @@ CREATE TABLE FASE_ENSAMBLE_PIEZA (
 	fk_zon_id INT NOT NULL,
 
 	CONSTRAINT pk_eez PRIMARY KEY (fk_esp_id, fk_zon_id),
-	CONSTRAINT fk_esp_id FOREIGN KEY (fk_esp_id) REFERENCES PROCESO_ENSAMBLE_PIEZA_EJEC (esp_id),
-	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA (zon_id)
+	CONSTRAINT fk_esp_id FOREIGN KEY (fk_esp_id) REFERENCES PROCESO_ENSAMBLE_PIEZA_EJEC (esp_id) ON DELETE CASCADE,
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA (zon_id) ON DELETE CASCADE
 	
 );
+
+CREATE TABLE ESTATUS_FEP (
+    sfe_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    sfe_fecha_fin DATE,
+	fk_esp_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+
+	CONSTRAINT pk_est_id PRIMARY KEY (fk_est_id,fk_esp_id, fk_zon_id),
+	CONSTRAINT fk_eez FOREIGN KEY (fk_esp_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_PIEZA(fk_esp_id, fk_zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ENSAMBLE_SOLICITUD_MATERIA (
+    elm_id SERIAL,
+    elm_cantidad INT NOT NULL, 
+    elm_unidad_medida VARCHAR(50) NOT NULL,
+	fk_esp_id INT NOT NULL, 
+	fk_zon_id INT NOT NULL, 
+	fk_sed_id INT NOT NULL,
+	fk_rpm_id INT NOT NULL,
+	fk_mps_id INT NOT NULL,
+
+	CONSTRAINT pk_elm PRIMARY KEY (elm_id, fk_esp_id, fk_zon_id),
+	CONSTRAINT fk_eez FOREIGN KEY (fk_esp_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_PIEZA(fk_esp_id, fk_zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_mps FOREIGN KEY (fk_sed_id, fk_rpm_id, fk_mps_id) REFERENCES MATERIA_PRIMA_STOCK(fk_sed_id, fk_rpm_id, mps_id) ON DELETE CASCADE,
+);
+
+CREATE TABLE ESTATUS_SME (
+    sme_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    sme_fecha_fin DATE,
+	fk_est_id INT NOT NULL,
+	fk_elm_id INT NOT NULL,
+	fk_esp_id INT NOT NULL, 
+	fk_zon_id INT NOT NULL,
+
+	CONSTRAINT pk_sme PRIMARY KEY (fk_est_id, elm_id, fk_esp_id, fk_zon_id),
+	CONSTRAINT fk_elm FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_id) REFERENCES (elm_id, fk_esp_id, fk_zon_id) ON DELETE, 
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
+);
+
 
 
 
