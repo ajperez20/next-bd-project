@@ -432,37 +432,32 @@ CREATE TABLE ESTATUS_ESP (
 	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE,
 );
 
+CREATE TABLE PRUEBA_PIEZA_SOLICITUD (
+    pzb_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    pzb_fecha_fin DATE,
+    pzb_resultado_prueba VARCHAR(255) NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_edz_id INT NOT NULL,
+	fk_pru_id INT NOT NULL,
 
-
-
---- revisar ----
-CREATE TABLE ENSAMBLE_SOLICITUD_PIEZA (
-    edz_id SERIAL PRIMARY KEY, 
-    edz_cantidad_piezas INT NOT NULL,
-	
+	CONSTRAINT pk_pzb PRIMARY KEY (fk_zon_id, fk_edz_id, fk_pru_id),
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_edz_id FOREIGN KEY (fk_edz_id) REFERENCES ENSAMBLE_SOLICITUD_PIEZA(edz_id) ON DELETE CASCADE,
+	CONSTRAINT fk_pru_id FOREIGN KEY (fk_pru_id) REFERENCES (pru_id) ON DELETE CASCADE
 );
----------------
 
+CREATE TABLE ESTATUS_PP_SOLICITUD (
+    api_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    api_fecha_fin DATE,
+	fk_zon_id INT NOT NULL,
+	fk_edz_id INT NOT NULL,
+	fk_pru_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
 
---- revisar ----
-CREATE TABLE AVION_CREADO (
-    avi_id SERIAL PRIMARY KEY,                
-    avi_num_serie VARCHAR(50) NOT NULL UNIQUE,
-    avi_fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,        
+	CONSTRAINT pk_api PRIMARY KEY (fk_est_id, fk_zon_id, fk_edz_id, fk_pru_id)
+	CONSTRAINT fk_pzb FOREIGN KEY (fk_zon_id, fk_edz_id, fk_pru_id) REFERENCES (fk_zon_id, fk_edz_id, fk_pru_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE
 );
-----------
-
-
-
-
-
-
-
-
-
-
-
-
 
 CREATE TABLE SOLICITUD_SEDE (
 	sse_id SERIAL PRIMARY KEY,
@@ -471,8 +466,8 @@ CREATE TABLE SOLICITUD_SEDE (
 	fk_sed_atiende INT NOT NULL,
 	fk_sed_solicita INT NOT NULL,
 
-	CONSTRAINT fk_sed_atiende FOREIGN KEY (fk_sed_atiende) REFERENCES SEDE_PLANTA(sed_id),
-	CONSTRAINT fk_sed_solicita FOREIGN KEY (fk_sed_solicita) REFERENCES SEDE_PLANTA(sed_id)
+	CONSTRAINT fk_sed_atiende FOREIGN KEY (fk_sed_atiende) REFERENCES SEDE_PLANTA(sed_id) ON DELETE CASCADE,
+	CONSTRAINT fk_sed_solicita FOREIGN KEY (fk_sed_solicita) REFERENCES SEDE_PLANTA(sed_id) ON DELETE CASCADE
 );
 
 CREATE TABLE DETALLE_SLD_SEDE (
@@ -483,8 +478,8 @@ CREATE TABLE DETALLE_SLD_SEDE (
 
 	
 	CONSTRAINT pk_dss PRIMARY KEY (fk_sse_id, fk_pie_id),
-	CONSTRAINT fk_sse_id FOREIGN KEY (fk_sse_id) REFERENCES SOLICITUD_SEDE(sse_id),
-	CONSTRAINT fk_pie_id FOREIGN KEY (fk_pie_id) REFERENCES PIEZA_STOCK(pie_id)
+	CONSTRAINT fk_sse_id FOREIGN KEY (fk_sse_id) REFERENCES SOLICITUD_SEDE(sse_id) ON DELETE CASCADE,
+	CONSTRAINT fk_pie_id FOREIGN KEY (fk_pie_id) REFERENCES PIEZA_STOCK(pie_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ESTATUS_SOL_PIEZA (
@@ -494,13 +489,20 @@ CREATE TABLE ESTATUS_SOL_PIEZA (
 	fk_est_id INT NOT NULL,
 
 	CONSTRAINT pk_slz PRIMARY KEY (fk_sse_id, fk_est_id),
-	CONSTRAINT fk_sse_id FOREIGN KEY (fk_sse_id) REFERENCES SOLICITUD_SEDE(sse_id),
-	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id)
+	CONSTRAINT fk_sse_id FOREIGN KEY (fk_sse_id) REFERENCES SOLICITUD_SEDE(sse_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
 );
 
+CREATE TABLE AVION_CREADO (
+    avi_id SERIAL PRIMARY KEY,                
+    avi_num_serie VARCHAR(50) NOT NULL UNIQUE,
+    avi_fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,
+	fk_eav_id INT NOT NULL UNIQUE,                   
+    fk_mda_id INT NOT NULL UNIQUE,                   
+    fk_zon_id INT NOT NULL UNIQUE,
 
-
-
+	CONSTRAINT fk_fln FOREIGN KEY (fk_eav_id, fk_mda_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_AVION(fk_eav_id, fk_mda_id, fk_zon_id) ON DELETE CASCADE
+);
 
 
 -----------------------------------------------------------------------------------------------
@@ -614,6 +616,37 @@ CREATE TABLE CLIENTE_JURIDICO (
 	CONSTRAINT cjd_rif CHECK (cjd_rif ~ '^[J]{1}[0-9]{9,10}$')
 );
 
+---------------------- Revisar Esto Que es de lo último-------
+CREATE TABLE SOLICITUD_CLIENTE (
+    sct_id SERIAL PRIMARY KEY,
+    sct_fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+    sct_total INT NOT NULL,
+    sct_cantidad INT NOT NULL,
+    sct_observacion VARCHAR(255),
+	fk_avi_id INT NOT NULL,
+	fk_cjd_id INT, 
+	fk_ctn_id INT,
+
+	CONSTRAINT fk_cjd_id FOREIGN KEY (fk_cjd_id) REFERENCES (cjd_id) ON DELETE CASCADE,
+	CONSTRAINT fk_ctn_id FOREIGN KEY (fk_ctn_id) REFERENCES (ctn_id) ON DELETE CASCADE,
+	CONSTRAINT fk_avi_id FOREIGN KEY (fk_avi_id) REFERENCES (avi_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ESTATUS_SCAV (
+    scv_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    scv_fecha_fin DATE,
+	fk_sct_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+
+	CONSTRAINT pk_scv PRIMARY KEY (fk_sct_id, fk_est_id),
+	CONSTRAINT fk_sct_id FOREIGN KEY (fk_sct_id) REFERENCES SOLICITUD_CLIENTE(sct_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE,
+);
+
+
+
+--------------------------------------------------------------
+
 CREATE TABLE PROVEEDOR_MP_STOCK (
 	mtp_id SERIAL PRIMARY KEY,
 	mtp_unidad_medida VARCHAR(30) NOT NULL,
@@ -633,6 +666,36 @@ CREATE TABLE PROVEEDOR (
 
 	CONSTRAINT fk_mtp_id FOREIGN KEY (fk_mtp_id) REFERENCES PROVEEDOR_MP_STOCK(mtp_id)
 );
+
+---------------------- Revisar Esto Que es de lo último-------
+
+CREATE TABLE SOLICITUD_PROVEEDOR (
+    spr_id SERIAL PRIMARY KEY,
+    spr_fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+    spr_total INT NOT NULL,    
+    spr_descripcion VARCHAR(255),
+	fk_com_id INT NOT NULL,
+	fk_mps_id INT NOT NULL, 
+	fk_sed_id INT NOT NULL,
+	fk_rpm_id INT NOT NULL,
+
+	CONSTRAINT fk_mps FOREIGN KEY (fk_mps_id, fk_sed_id, fk_rpm_id) REFERENCES (mps_id, fk_sed_id, fk_rpm_id) ON DELETE CASCADE, 
+	CONSTRAINT fk_com_id FOREIGN KEY (fk_com_id) REFERENCES PROVEEDOR(com_id) ON DELETE CASCADE
+);
+
+CREATE TABLE DETALLE_SLD_PROVEEDOR (
+    dsp_cantidad INT NOT NULL, 
+    dsp_unidad_medida VARCHAR(255) NOT NULL,
+	fk_mtp_id INT NOT NULL,
+	fk_spr_id INT NOT NULL,
+
+	CONSTRAINT pk_dsp PRIMARY KEY (fk_mtp_id, fk_spr_id),
+	CONSTRAINT fk_mtp_id FOREIGN KEY (fk_mtp_id) REFERENCES (mtp_id) ON DELETE CASCADE,
+	CONSTRAINT fk_spr_id FOREIGN KEY () REFERENCES 
+	
+);
+
+-------------------------------------------------------------
 
 --------- Esperando las correcciones de anak ----------------
 
