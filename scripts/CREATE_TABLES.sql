@@ -23,7 +23,7 @@ CREATE TABLE TIPO_AVION
 (
     tiv_id          SERIAL PRIMARY KEY,
     tiv_nombre      VARCHAR(50) NOT NULL,
-    tiv_descripcion VARCHAR(70) NOT NULL
+    tiv_descripcion VARCHAR(255) NOT NULL
 );
 
 -- 2.2 Característica de Avión (Configuración)
@@ -1350,7 +1350,6 @@ CREATE TABLE USUARIO
 CREATE TABLE METODO_PAGO
 (
     met_id                SERIAL PRIMARY KEY,
-    met_cl_identificacion VARCHAR(11),
     efe_denominacion      VARCHAR(20),
     trf_num_transferencia VARCHAR(18),
     che_num_cheque        VARCHAR(7),
@@ -1378,7 +1377,7 @@ CREATE TABLE MONEDA
     mon_id           SERIAL PRIMARY KEY,
     mon_tipo         VARCHAR(20) NOT NULL,
     mon_valor_cambio INT         NOT NULL,
-    mon_fecha_inicio DATE        NOT NULL,
+    mon_fecha_inicio DATE        NOT NULL DEFAULT CURRENT_DATE, 
     mon_fecha_fin    DATE
 );
 
