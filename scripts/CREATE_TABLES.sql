@@ -338,8 +338,9 @@ CREATE TABLE SEDE_MATERIAL_PRUEBA
     fk_sed_id            INT          NOT NULL,
     fk_rpm_id            INT          NOT NULL,
     fk_mps_id            INT          NOT NULL,
+    fk_pru_id            INT          NOT NULL,
     CONSTRAINT pk_pbm
-        PRIMARY KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id),
+        PRIMARY KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id, fk_pru_id),
     CONSTRAINT fk_mps
         FOREIGN KEY (fk_sed_id, fk_rpm_id, fk_mps_id)
             REFERENCES MATERIA_PRIMA_STOCK (fk_sed_id, fk_rpm_id, mps_id)
@@ -347,6 +348,10 @@ CREATE TABLE SEDE_MATERIAL_PRUEBA
     CONSTRAINT fk_zon_id
         FOREIGN KEY (fk_zon_id)
             REFERENCES ZONA (zon_id)
+            ON DELETE CASCADE,
+   CONSTRAINT fk_pru_id
+        FOREIGN KEY (fk_pru_id)
+            REFERENCES PRUEBA (pru_id)
             ON DELETE CASCADE
 );
 
@@ -360,11 +365,12 @@ CREATE TABLE ESTATUS_PMS
     fk_sed_id        INT  NOT NULL,
     fk_rpm_id        INT  NOT NULL,
     fk_mps_id        INT  NOT NULL,
+    fk_pru_id        INT  NOT NULL,
     CONSTRAINT pk_sms
-        PRIMARY KEY (fk_est_id, fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id),
+        PRIMARY KEY (fk_est_id, fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id, fk_pru_id),
     CONSTRAINT fk_pbm
-        FOREIGN KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id)
-            REFERENCES SEDE_MATERIAL_PRUEBA (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id)
+        FOREIGN KEY (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id, fk_pru_id)
+            REFERENCES SEDE_MATERIAL_PRUEBA (fk_zon_id, fk_sed_id, fk_rpm_id, fk_mps_id, fk_pru_id)
             ON DELETE CASCADE,
     CONSTRAINT fk_est_id
         FOREIGN KEY (fk_est_id)
