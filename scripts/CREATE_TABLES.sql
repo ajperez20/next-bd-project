@@ -30,7 +30,7 @@ CREATE TABLE TIPO_AVION
 CREATE TABLE CARACTERISTICA_ANV_CONF
 (
     pvv_id                    SERIAL PRIMARY KEY,
-    pvv_nombre_caracteristica VARCHAR(50) NOT NULL
+    pvv_nombre_caracteristica VARCHAR(255) NOT NULL
 );
 
 -- 2.3 Modelo de Avión (Configuración)
@@ -68,7 +68,7 @@ CREATE TABLE PROCESO_ENSAMBLE_AVION_CONF
     epv_id             SERIAL PRIMARY KEY,
     epv_nombre_proceso VARCHAR(50) NOT NULL,
     epv_tiempo_estimado INTERVAL NOT NULL,
-    epv_descripcion    VARCHAR(70) NOT NULL
+    epv_descripcion    VARCHAR(255) NOT NULL
 );
 
 -- 2.6 Fase de Ensamble de Avión (Configuración)
@@ -91,7 +91,7 @@ CREATE TABLE MODELO_PIEZA_CONF
 (
     mec_id           SERIAL PRIMARY KEY,
     mec_nombre_pieza VARCHAR(50) NOT NULL,
-    mec_descripcion  VARCHAR(30) NOT NULL
+    mec_descripcion  VARCHAR(255) NOT NULL
 );
 
 -- 2.8 Composición (Relación recursiva de piezas)
@@ -155,6 +155,8 @@ CREATE TABLE FASE_PRUEBA
 (
     fk_mda_id INT NOT NULL,
     fk_prc_id INT NOT NULL,
+    CONSTRAINT pk_fase_prueba
+        PRIMARY KEY (fk_prc_id, fk_mda_id),
     CONSTRAINT fk_prc_id
         FOREIGN KEY (fk_prc_id)
             REFERENCES PRUEBA_CONF (prc_id),
@@ -167,7 +169,7 @@ CREATE TABLE FASE_PRUEBA
 CREATE TABLE CARACTERISTICA_PIEZA_CONF
 (
     pcc_id                    SERIAL PRIMARY KEY,
-    pcc_nombre_caracteristica VARCHAR(50) NOT NULL
+    pcc_nombre_caracteristica VARCHAR(255) NOT NULL
 );
 
 -- 2.14 Relación Pieza - Característica
@@ -191,8 +193,8 @@ CREATE TABLE PIEZA_CARACTERISTICA
 CREATE TABLE MATERIAL_PIEZA_CONF
 (
     mac_id              SERIAL PRIMARY KEY,
-    mac_nombre_material VARCHAR(50) NOT NULL,
-    mac_descripcion     VARCHAR(70) NOT NULL
+    mac_nombre_material VARCHAR(80) NOT NULL,
+    mac_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 2.16 Proceso Ensamble de Pieza (Configuración)
