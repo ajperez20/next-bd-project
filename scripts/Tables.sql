@@ -336,17 +336,52 @@ CREATE TABLE ESTATUS_PPEM (
 	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id)
 );
 
+CREATE TABLE PIEZA_STOCK (
+	pie_id SERIAL PRIMARY KEY,
+	pie_numero_serial VARCHAR(50) NOT NULL,
+	pie_nombre VARCHAR(50) NOT NULL,
+	pie_fecha_fabricacion DATE NOT NULL DEFAULT CURRENT_DATE,
+	pie_cantidad_disponible INT NOT NULL,
+	fk_sed_id INT NOT NULL,
+	fk_esp_id INT NOT NULL UNIQUE,
+	fk_zon_id INT NOT NULL UNIQUE,
 
+	CONSTRAINT fk_sed_id FOREIGN KEY (fk_sed_id) REFERENCES SEDE_PLANTA(sed_id) ON DELETE CASCADE,
+	CONSTRAINT fk_eez FOREIGN KEY (fk_esp_id,fk_zon_id) REFERENCES FASE_ENSAMBLE_PIEZA(fk_zon_id,fk_esp_id) ON DELETE CASCADE
+);
 
+CREATE TABLE PRUEBA_PIEZA_SEDE (
+	psz_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+	psz_fecha_fin DATE,
+	psz_resultado VARCHAR(255) NOT NULL,
+	fk_pie_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_pru_id INT NOT NULL,
+	
+	CONSTRAINT pk_psz PRIMARY KEY (fk_pie_id, fk_zon_id, fk_pru_id),
+	CONSTRAINT fk_pie_id FOREIGN KEY (fk_pie_id) REFERENCES PIEZA_STOCK(pie_id) ON DELETE CASCADE,
+	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_pru_id FOREIGN KEY (fk_pru_id) REFERENCES PRUEBA(pru_id) ON DELETE CASCADE
+);
 
+CREATE TABLE ESTATUS_PPS (
+	ssp_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+	ssp_fecha_fin DATE,
+	fk_pie_id INT NOT NULL,
+	fk_zon_id INT NOT NULL,
+	fk_pru_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
 
+	CONSTRAINT pk_est_pps PRIMARY KEY (fk_pie_id, fk_zon_id, fk_pru_id, fk_est_id),
+	CONSTRAINT fk_psz FOREIGN KEY (fk_pie_id, fk_zon_id, fk_pru_id) REFERENCES PRUEBA_PIEZA_SEDE(fk_pie_id, fk_zon_id, fk_pru_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
+);
 
 CREATE TABLE PROCESO_ENSAMBLE_AVION_EJEC (
     eav_id SERIAL PRIMARY KEY, 
     eav_tiempo_estimado INTERVAL NOT NULL, 
     eav_descripcion VARCHAR(255) NOT NULL 
 );
-
 
 CREATE TABLE FASE_ENSAMBLE_AVION (
     fln_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,         
@@ -355,7 +390,7 @@ CREATE TABLE FASE_ENSAMBLE_AVION (
     fk_mda_id INT NOT NULL,                   
     fk_zon_id INT NOT NULL,       
 	
-    CONSTRAINT pk_fase_ensamble_avion PRIMARY KEY (fk_eav_id, fk_mda_id, fk_zon_id),
+    CONSTRAINT pk_fln PRIMARY KEY (fk_eav_id, fk_mda_id, fk_zon_id),
     CONSTRAINT fk_proceso_avion FOREIGN KEY (fk_eav_id) REFERENCES PROCESO_ENSAMBLE_AVION_EJEC(eav_id) ON DELETE CASCADE,
     CONSTRAINT fk_modelo_avion FOREIGN KEY (fk_mda_id) REFERENCES MODELO_AVION_CONF(mda_id) ON DELETE CASCADE,
     CONSTRAINT fk_zona FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id) ON DELETE CASCADE
@@ -374,6 +409,28 @@ CREATE TABLE ESTATUS_FEA (
 	CONSTRAINT fk_estatus FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id) ON DELETE CASCADE
 );
 
+CREATE TABLE ENSAMBLE_SOLICITUD_PIEZA (
+    edz_id SERIAL PRIMARY KEY,
+    edz_cantidad_piezas INT NOT NULL,
+	fk_eav_id INT NOT NULL,                   
+    fk_mda_id INT NOT NULL,                   
+    fk_zon_id INT NOT NULL,
+	fk_pie_id INT NOT NULL,
+
+	CONSTRAINT fk_fln FOREIGN KEY (fk_eav_id, fk_mda_id, fk_zon_id) REFERENCES FASE_ENSAMBLE_AVION(fk_eav_id, fk_mda_id, fk_zon_id) ON DELETE CASCADE
+	CONSTRAINT fk_pie_id FOREIGN KEY (fk_pie_id) REFERENCES PIEZA_STOCK(pie_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ESTATUS_ESP (
+    ets_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    ets_fecha_fin DATE,
+	fk_est_id INT NOT NULL,
+	fk_edz_id INT NOT NULL,
+
+	CONSTRAINT pk_ets PRIMARY KEY (fk_est_id, fk_edz_id),
+	CONSTRAINT fk_edz_id FOREIGN KEY (fk_edz_id) REFERENCES (edz_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES (est_id) ON DELETE CASCADE,
+);
 
 
 
@@ -396,43 +453,11 @@ CREATE TABLE AVION_CREADO (
 ----------
 
 
-CREATE TABLE PIEZA_STOCK (
-	pie_id SERIAL PRIMARY KEY,
-	pie_numero_serial VARCHAR(50) NOT NULL,
-	pie_nombre VARCHAR(50) NOT NULL,
-	pie_fecha_fabricacion DATE NOT NULL DEFAULT CURRENT_DATE,
-	pie_cantidad_disponible INT NOT NULL,
-	fk_sed_id INT NOT NULL,
 
-	CONSTRAINT fk_sed_id FOREIGN KEY (fk_sed_id) REFERENCES SEDE_PLANTA(sed_id)
-);
 
-CREATE TABLE PRUEBA_PIEZA_SEDE (
-	psz_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
-	psz_fecha_fin DATE,
-	psz_resultado VARCHAR(50) NOT NULL,
-	fk_pie_id INT NOT NULL,
-	fk_zon_id INT NOT NULL,
-	fk_pru_id INT NOT NULL,
-	
-	CONSTRAINT pk_prueba_ps PRIMARY KEY (fk_pie_id, fk_zon_id, fk_pru_id),
-	CONSTRAINT fk_pie_id FOREIGN KEY (fk_pie_id) REFERENCES PIEZA_STOCK(pie_id),
-	CONSTRAINT fk_zon_id FOREIGN KEY (fk_zon_id) REFERENCES ZONA(zon_id),
-	CONSTRAINT fk_pru_id FOREIGN KEY (fk_pru_id) REFERENCES PRUEBA(pru_id)
-);
 
-CREATE TABLE ESTATUS_PPS (
-	ssp_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
-	ssp_fecha_fin DATE,
-	fk_pie_id INT NOT NULL,
-	fk_zon_id INT NOT NULL,
-	fk_pru_id INT NOT NULL,
-	fk_est_id INT NOT NULL,
 
-	CONSTRAINT pk_est_pps PRIMARY KEY (fk_pie_id, fk_zon_id, fk_pru_id, fk_est_id),
-	CONSTRAINT fk_psz FOREIGN KEY (fk_pie_id, fk_zon_id, fk_pru_id) REFERENCES PRUEBA_PIEZA_SEDE(fk_pie_id, fk_zon_id, fk_pru_id),
-	CONSTRAINT fk_est FOREIGN KEY (fk_est_id) REFERENCES ESTATUS(est_id)
-);
+
 
 
 
