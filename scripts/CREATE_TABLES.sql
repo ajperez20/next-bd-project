@@ -201,9 +201,9 @@ CREATE TABLE MATERIAL_PIEZA_CONF
 CREATE TABLE PROCESO_ENSAMBLE_PIEZA_CONF
 (
     epc_id             SERIAL PRIMARY KEY,
-    epc_nombre_proceso VARCHAR(50) NOT NULL,
+    epc_nombre_proceso VARCHAR(80) NOT NULL,
     epc_tiempo_estimado INTERVAL NOT NULL,
-    epc_descripcion    VARCHAR(70) NOT NULL
+    epc_descripcion    VARCHAR(255) NOT NULL
 );
 
 -- 2.17 Fase Ensamble Pieza (Configuración)
