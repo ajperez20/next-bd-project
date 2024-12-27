@@ -820,7 +820,7 @@ CREATE TABLE EMPLEADO
 CREATE TABLE EQUIPO_ENCARGADO
 (
     eqc_id          SERIAL      NOT NULL,
-    eqc_descripcion VARCHAR(70) NOT NULL,
+    eqc_descripcion VARCHAR(255) NOT NULL,
     fk_zon_id       INT         NOT NULL,
     fk_per_id       INT         NOT NULL,
     CONSTRAINT pk_equi_encargado
@@ -1054,7 +1054,7 @@ CREATE TABLE SOLICITUD_PROVEEDOR
 CREATE TABLE DETALLE_SLD_PROVEEDOR
 (
     dsp_cantidad      INT          NOT NULL,
-    dsp_unidad_medida VARCHAR(255) NOT NULL,
+    dsp_unidad_medida VARCHAR(50) NOT NULL,
     fk_mtp_id         INT          NOT NULL,
     fk_spr_id         INT          NOT NULL,
     CONSTRAINT pk_dsp
