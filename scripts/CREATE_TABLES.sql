@@ -11,7 +11,7 @@ CREATE TABLE LUGAR
     -- Relación recursiva con la entidad LUGAR
     CONSTRAINT fk_lugar_padre
         FOREIGN KEY (fk_lug_id)
-            REFERENCES LUGAR (lug_id)
+            REFERENCES LUGAR (lug_id) ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ CREATE TABLE MODELO_AVION_CONF
     fk_tiv_id       INT         NOT NULL,
     CONSTRAINT fk_tiv_id
         FOREIGN KEY (fk_tiv_id)
-            REFERENCES TIPO_AVION (tiv_id)
+            REFERENCES TIPO_AVION (tiv_id) ON DELETE CASCADE
 );
 
 -- 2.4 Relación (Modelo Avión - Característica)
@@ -56,10 +56,10 @@ CREATE TABLE MODELO_AVION_CARACTERISTICA
         PRIMARY KEY (fk_mda_id, fk_pvv_id),
     CONSTRAINT fk_pvv_id
         FOREIGN KEY (fk_pvv_id)
-            REFERENCES CARACTERISTICA_ANV_CONF (pvv_id),
+            REFERENCES CARACTERISTICA_ANV_CONF (pvv_id) ON DELETE CASCADE,
     CONSTRAINT fk_mda_id
         FOREIGN KEY (fk_mda_id)
-            REFERENCES MODELO_AVION_CONF (mda_id)
+            REFERENCES MODELO_AVION_CONF (mda_id) ON DELETE CASCADE
 );
 
 -- 2.5 Proceso de Ensamble de Avión (Configuración)
@@ -80,10 +80,10 @@ CREATE TABLE FASE_ENSAMBLE_AVION_CONF
         PRIMARY KEY (fk_epv_id, fk_mda_id),
     CONSTRAINT fk_epv_id
         FOREIGN KEY (fk_epv_id)
-            REFERENCES PROCESO_ENSAMBLE_AVION_CONF (epv_id),
+            REFERENCES PROCESO_ENSAMBLE_AVION_CONF (epv_id) ON DELETE CASCADE,
     CONSTRAINT fk_mda_id
         FOREIGN KEY (fk_mda_id)
-            REFERENCES MODELO_AVION_CONF (mda_id)
+            REFERENCES MODELO_AVION_CONF (mda_id) ON DELETE CASCADE
 );
 
 -- 2.7 Modelo de Pieza (Configuración)
@@ -104,10 +104,10 @@ CREATE TABLE COMPOSICION
         PRIMARY KEY (fk_compone, fk_compuesta),
     CONSTRAINT fk_compuesta
         FOREIGN KEY (fk_compuesta)
-            REFERENCES MODELO_PIEZA_CONF (mec_id),
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE,
     CONSTRAINT fk_compone
         FOREIGN KEY (fk_compone)
-            REFERENCES MODELO_PIEZA_CONF (mec_id)
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE
 );
 
 -- 2.9 Avión - Componente (Piezas que pertenecen a ciertos procesos de ensamble)
@@ -121,10 +121,10 @@ CREATE TABLE AVION_COMPONENTE
         PRIMARY KEY (fk_epv_id, fk_mda_id, fk_mec_id),
     CONSTRAINT fk_fasebavcf
         FOREIGN KEY (fk_epv_id, fk_mda_id)
-            REFERENCES FASE_ENSAMBLE_AVION_CONF (fk_epv_id, fk_mda_id),
+            REFERENCES FASE_ENSAMBLE_AVION_CONF (fk_epv_id, fk_mda_id) ON DELETE CASCADE,
     CONSTRAINT fk_mec_id
         FOREIGN KEY (fk_mec_id)
-            REFERENCES MODELO_PIEZA_CONF (mec_id)
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE
 );
 
 -- 2.10 Prueba de Avión (Configuración)
@@ -144,10 +144,10 @@ CREATE TABLE MODELO_PRUEBA
         PRIMARY KEY (fk_prc_id, fk_mec_id),
     CONSTRAINT fk_mec_id
         FOREIGN KEY (fk_mec_id)
-            REFERENCES MODELO_PIEZA_CONF (mec_id),
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE,
     CONSTRAINT fk_prc_id
         FOREIGN KEY (fk_prc_id)
-            REFERENCES PRUEBA_CONF (prc_id)
+            REFERENCES PRUEBA_CONF (prc_id) ON DELETE CASCADE
 );
 
 -- 2.12 Fase Prueba (Configuración)
@@ -159,10 +159,10 @@ CREATE TABLE FASE_PRUEBA
         PRIMARY KEY (fk_prc_id, fk_mda_id),
     CONSTRAINT fk_prc_id
         FOREIGN KEY (fk_prc_id)
-            REFERENCES PRUEBA_CONF (prc_id),
+            REFERENCES PRUEBA_CONF (prc_id) ON DELETE CASCADE,
     CONSTRAINT fk_mda_id
         FOREIGN KEY (fk_mda_id)
-            REFERENCES MODELO_AVION_CONF (mda_id)
+            REFERENCES MODELO_AVION_CONF (mda_id) ON DELETE CASCADE
 );
 
 -- 2.13 Característica de Pieza (Configuración)
@@ -183,10 +183,10 @@ CREATE TABLE PIEZA_CARACTERISTICA
         PRIMARY KEY (fk_pcc_id, fk_mec_id),
     CONSTRAINT fk_mec_id
         FOREIGN KEY (fk_mec_id)
-            REFERENCES MODELO_PIEZA_CONF (mec_id),
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE,
     CONSTRAINT fk_pcc_id
         FOREIGN KEY (fk_pcc_id)
-            REFERENCES CARACTERISTICA_PIEZA_CONF (pcc_id)
+            REFERENCES CARACTERISTICA_PIEZA_CONF (pcc_id) ON DELETE CASCADE
 );
 
 -- 2.15 Material de Pieza (Configuración)
@@ -215,10 +215,10 @@ CREATE TABLE FASE_ENSAMBLE_PIEZA_CONF
         PRIMARY KEY (fk_mec_id, fk_epc_id),
     CONSTRAINT fk_mec_id
         FOREIGN KEY (fk_mec_id)
-            REFERENCES MODELO_PIEZA_CONF (mec_id),
+            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE,
     CONSTRAINT fk_epc_id
         FOREIGN KEY (fk_epc_id)
-            REFERENCES PROCESO_ENSAMBLE_PIEZA_CONF (epc_id)
+            REFERENCES PROCESO_ENSAMBLE_PIEZA_CONF (epc_id) ON DELETE CASCADE
 );
 
 -- 2.18 Material Fase
@@ -233,10 +233,10 @@ CREATE TABLE MATERIAL_FASE
         PRIMARY KEY (fk_mec_id, fk_epc_id, fk_mac_id),
     CONSTRAINT fk_fase_epc
         FOREIGN KEY (fk_mec_id, fk_epc_id)
-            REFERENCES FASE_ENSAMBLE_PIEZA_CONF (fk_mec_id, fk_epc_id),
+            REFERENCES FASE_ENSAMBLE_PIEZA_CONF (fk_mec_id, fk_epc_id) ON DELETE CASCADE,
     CONSTRAINT fk_mac_id
         FOREIGN KEY (fk_mac_id)
-            REFERENCES MATERIAL_PIEZA_CONF (mac_id)
+            REFERENCES MATERIAL_PIEZA_CONF (mac_id) ON DELETE CASCADE
 );
 
 -- 2.19 Materia Prima
