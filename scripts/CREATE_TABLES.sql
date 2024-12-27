@@ -729,7 +729,7 @@ CREATE TABLE SOLICITUD_SEDE
 (
     sse_id          SERIAL PRIMARY KEY,
     sse_fecha       DATE NOT NULL DEFAULT CURRENT_DATE,
-    sse_descripcion VARCHAR(70),
+    sse_descripcion VARCHAR(255),
     fk_sed_atiende  INT  NOT NULL,
     fk_sed_solicita INT  NOT NULL,
     CONSTRAINT fk_sed_atiende
@@ -746,7 +746,7 @@ CREATE TABLE SOLICITUD_SEDE
 CREATE TABLE DETALLE_SLD_SEDE
 (
     dss_cantidad    INT NOT NULL,
-    dss_descripcion VARCHAR(50),
+    dss_descripcion VARCHAR(255),
     fk_sse_id       INT NOT NULL,
     fk_pie_id       INT NOT NULL,
     CONSTRAINT pk_dss
