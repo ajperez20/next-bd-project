@@ -834,7 +834,9 @@ CREATE TABLE EXPERIENCIA
     fk_per_id          INT         NOT NULL,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id)
+            REFERENCES EMPLEADO (per_id),
+   CONSTRAINT ck_fecha_fin
+        CHECK (exp_fecha_fin > exp_fecha_inicio)
 );
 
 -- 4.4 Beneficiario
@@ -867,7 +869,7 @@ CREATE TABLE PER_BEN
             REFERENCES BENEFICIARIO (ben_id),
     CONSTRAINT ck_parentezco
         CHECK (
-            UPPER(prb_parentezco) in ('HERMAN@', 'PADR', 'MADRE', 'OTRO')
+            UPPER(prb_parentezco) in ('HERMAN@', 'PADRE', 'MADRE', 'OTRO')
             )
 );
 
@@ -905,10 +907,10 @@ CREATE TABLE EMPLEADO_TITULO
 CREATE TABLE CLIENTE_NATURAL
 (
     ctn_id                    SERIAL PRIMARY KEY,
-    ctn_direccion             VARCHAR(70) NOT NULL,
-    ctn_url_pagina            VARCHAR(50) NOT NULL,
+    ctn_direccion             VARCHAR(255) NOT NULL,
+    ctn_url_pagina            VARCHAR(255) NOT NULL,
     ctn_fecha_ini_operaciones DATE        NOT NULL DEFAULT CURRENT_DATE,
-    ctn_dni                   VARCHAR(50) NOT NULL,
+    ctn_dni                   VARCHAR(50) NOT NULL UNIQUE,
     ctn_nombre                VARCHAR(50) NOT NULL,
     ctn_apellido              VARCHAR(50) NOT NULL,
     fk_lug_id                 INT         NOT NULL,
@@ -924,15 +926,20 @@ CREATE TABLE CLIENTE_NATURAL
 CREATE TABLE CLIENTE_JURIDICO
 (
     cjd_id                    SERIAL PRIMARY KEY,
-    cjd_direccion             VARCHAR(70) NOT NULL,
-    cjd_url_pagina            VARCHAR(50) NOT NULL,
+    cjd_direccion             VARCHAR(255) NOT NULL,
+    cjd_url_pagina            VARCHAR(255) NOT NULL,
     cjd_fecha_ini_operaciones DATE        NOT NULL DEFAULT CURRENT_DATE,
-    cjd_rif                   VARCHAR(70) NOT NULL,
+    cjd_rif                   VARCHAR(70) NOT NULL UNIQUE,
     cjd_nombre                VARCHAR(50) NOT NULL,
     cjd_descripcion           VARCHAR(70) NOT NULL,
+    fk_lug_id 				  INT 		  NOT NULL,
     CONSTRAINT cjd_rif
         CHECK (cjd_rif ~ '^[J]{1}[0-9]{9,10}$'
-)
+),
+	CONSTRAINT fk_lug_id
+        FOREIGN KEY (fk_lug_id)
+            REFERENCES LUGAR (lug_id)
+	
     );
 
 -- 5.3 Solicitud Cliente
@@ -1004,9 +1011,13 @@ CREATE TABLE PROVEEDOR
     com_url_pagina         VARCHAR(70) NOT NULL,
     com_fechaI_operaciones DATE        NOT NULL DEFAULT CURRENT_DATE,
     fk_mtp_id              INT         NOT NULL,
+    fk_lug_id              INT         NOT NULL,
     CONSTRAINT fk_mtp_id
         FOREIGN KEY (fk_mtp_id)
-            REFERENCES PROVEEDOR_MP_STOCK (mtp_id)
+            REFERENCES PROVEEDOR_MP_STOCK (mtp_id),
+   CONSTRAINT fk_lug_id
+        FOREIGN KEY (fk_lug_id)
+            REFERENCES LUGAR (lug_id)
 );
 
 -- 6.3 Solicitud Proveedor
@@ -1097,7 +1108,7 @@ CREATE TABLE EMPLEADO_CARGO
         FOREIGN KEY (fk_per_id)
             REFERENCES EMPLEADO (per_id),
     CONSTRAINT ck_fecha_fin
-        CHECK (emc_fecha_inicio < emc_fecha_fin)
+        CHECK (emc_fecha_inicio > emc_fecha_fin)
 );
 
 -- 7.3 Horario
@@ -1136,7 +1147,10 @@ CREATE TABLE EMP_CARGO_HORARIO
         PRIMARY KEY (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id),
     CONSTRAINT fk_empleado_cargo
         FOREIGN KEY (fk_per_id, fk_car_id, fk_emc_id)
-            REFERENCES EMPLEADO_CARGO (fk_per_id, fk_car_id, emc_id)
+            REFERENCES EMPLEADO_CARGO (fk_per_id, fk_car_id, emc_id),
+    CONSTRAINT fk_hor_id
+        FOREIGN KEY (fk_hor_id)
+            REFERENCES HORARIO (hor_id)
 );
 
 -- 7.5 Asistencia
@@ -1170,7 +1184,7 @@ CREATE TABLE PAGO_NOMINA
     pnn_id          SERIAL PRIMARY KEY,
     pnn_fecha_pago  DATE NOT NULL DEFAULT CURRENT_DATE,
     pnn_total_pago  INT  NOT NULL,
-    pnn_descripcion VARCHAR(70),
+    pnn_descripcion VARCHAR(255),
     fk_asi          INT  NOT NULL,
     CONSTRAINT fk_asi
         FOREIGN KEY (fk_asi)
@@ -1277,6 +1291,7 @@ CREATE TABLE ROL
 (
     rol_id     SERIAL PRIMARY KEY,
     rol_nombre VARCHAR(30) NOT NULL,
+    rol_descripcion VARCHAR(255),
     CONSTRAINT ck_rol_nombre
         CHECK (UPPER(rol_nombre) in ('EMPLEADO', 'CLIENTE', 'PROVEEDOR', 'ADMINISTRADOR'))
 );
@@ -1305,12 +1320,26 @@ CREATE TABLE USUARIO
     usu_email          VARCHAR(60) NOT NULL,
     fk_rol_id          INT         NOT NULL,
     fk_per_id          INT         NOT NULL,
+    fk_cjd_id	       INT         NOT NULL,
+    fk_ctn_id 		   INT         NOT NULL,
+    fk_com_id          INT         NOT NULL,
+    
     CONSTRAINT fk_rol_id
         FOREIGN KEY (fk_rol_id)
             REFERENCES ROL (rol_id),
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id)
+            REFERENCES EMPLEADO (per_id),
+    CONSTRAINT fk_cjd_id
+        FOREIGN KEY (fk_cjd_id)
+            REFERENCES CLIENTE_JURIDICO (cjd_id),
+    CONSTRAINT fk_ctn_id
+        FOREIGN KEY (fk_ctn_id)
+            REFERENCES CLIENTE_NATURAL (ctn_id),
+    CONSTRAINT fk_com_id
+        FOREIGN KEY (fk_com_id)
+            REFERENCES PROVEEDOR (com_id)
+    
 );
 
 --------------------------------------------------------------------------------
