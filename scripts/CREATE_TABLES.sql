@@ -38,7 +38,7 @@ CREATE TABLE MODELO_AVION_CONF
 (
     mda_id          SERIAL PRIMARY KEY,
     mda_nombre      VARCHAR(50) NOT NULL,
-    mda_descripcion VARCHAR(70) NOT NULL,
+    mda_descripcion VARCHAR(255) NOT NULL,
     fk_tiv_id       INT         NOT NULL,
     CONSTRAINT fk_tiv_id
         FOREIGN KEY (fk_tiv_id)
