@@ -481,6 +481,7 @@ CREATE TABLE ENSAMBLE_MATERIAL_PRUEBA
     epr_fecha_fin        DATE,
     epr_resultado_prueba VARCHAR(255) NOT NULL,
     fk_pru_id            INT          NOT NULL,
+    fk_zon_elm           INT          NOT NULL,
     fk_zon_id            INT          NOT NULL,
     fk_elm_id            INT          NOT NULL,
     fk_esp_id            INT          NOT NULL,
@@ -495,7 +496,7 @@ CREATE TABLE ENSAMBLE_MATERIAL_PRUEBA
             REFERENCES ZONA (zon_id)
             ON DELETE CASCADE,
     CONSTRAINT fk_elm
-        FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_id)
+        FOREIGN KEY (fk_elm_id, fk_esp_id, fk_zon_elm)
             REFERENCES ENSAMBLE_SOLICITUD_MATERIA (elm_id, fk_esp_id, fk_zon_id)
             ON DELETE CASCADE
 );
@@ -523,13 +524,13 @@ CREATE TABLE ESTATUS_PPEM
 CREATE TABLE PIEZA_STOCK
 (
     pie_id                  SERIAL PRIMARY KEY,
-    pie_numero_serial       VARCHAR(50) NOT NULL,
-    pie_nombre              VARCHAR(50) NOT NULL,
+    pie_numero_serial       VARCHAR(255) NOT NULL,
+    pie_nombre              VARCHAR(80) NOT NULL,
     pie_fecha_fabricacion   DATE        NOT NULL DEFAULT CURRENT_DATE,
     pie_cantidad_disponible INT         NOT NULL,
     fk_sed_id               INT         NOT NULL,
-    fk_esp_id               INT         NOT NULL,
-    fk_zon_id               INT         NOT NULL,
+    fk_esp_id               INT         NOT NULL UNIQUE,
+    fk_zon_id               INT         NOT NULL UNIQUE,
     CONSTRAINT fk_sed_id
         FOREIGN KEY (fk_sed_id)
             REFERENCES SEDE_PLANTA (sed_id)
