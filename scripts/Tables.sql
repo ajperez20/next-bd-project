@@ -679,7 +679,7 @@ CREATE TABLE SOLICITUD_PROVEEDOR (
 	fk_sed_id INT NOT NULL,
 	fk_rpm_id INT NOT NULL,
 
-	CONSTRAINT fk_mps FOREIGN KEY (fk_mps_id, fk_sed_id, fk_rpm_id) REFERENCES (mps_id, fk_sed_id, fk_rpm_id) ON DELETE CASCADE, 
+	CONSTRAINT fk_mps FOREIGN KEY (fk_mps_id, fk_sed_id, fk_rpm_id) REFERENCES MATERIA_PRIMA_STOCK(mps_id, fk_sed_id, fk_rpm_id) ON DELETE CASCADE, 
 	CONSTRAINT fk_com_id FOREIGN KEY (fk_com_id) REFERENCES PROVEEDOR(com_id) ON DELETE CASCADE
 );
 
@@ -690,10 +690,22 @@ CREATE TABLE DETALLE_SLD_PROVEEDOR (
 	fk_spr_id INT NOT NULL,
 
 	CONSTRAINT pk_dsp PRIMARY KEY (fk_mtp_id, fk_spr_id),
-	CONSTRAINT fk_mtp_id FOREIGN KEY (fk_mtp_id) REFERENCES (mtp_id) ON DELETE CASCADE,
-	CONSTRAINT fk_spr_id FOREIGN KEY () REFERENCES 
-	
+	CONSTRAINT fk_mtp_id FOREIGN KEY (fk_mtp_id) REFERENCES PROVEEDOR_MP_STOCK(mtp_id) ON DELETE CASCADE,
+	CONSTRAINT fk_spr_id FOREIGN KEY (fk_spr_id) REFERENCES SOLICITUD_PROVEEDOR(spr_id) ON DELETE CASCADE
 );
+
+CREATE TABLE ESTATUS_SSP (
+    ups_fecha_inicio DATE NOT NULL DEFAULT CURRENT_DATE,
+    ups_fecha_fin DATE,
+	fk_spr_id INT NOT NULL,
+	fk_est_id INT NOT NULL,
+
+	CONSTRAINT pk_ups PRIMARY KEY (fk_spr_id, fk_est_id),
+	CONSTRAINT fk_spr_id FOREIGN KEY (fk_spr_id) REFERENCES SOLICITUD_PROVEEDOR(spr_id) ON DELETE CASCADE,
+	CONSTRAINT fk_est_id FOREIGN KEY (fk_est_id) REFERENCES ESTATUS (est_id) ON DELETE CASCADE
+);
+
+
 
 -------------------------------------------------------------
 
@@ -768,10 +780,10 @@ CREATE TABLE PAGO_NOMINA (
 CREATE TABLE RED_SOCIAL (
 	res_id SERIAL PRIMARY KEY,
 	res_usuario VARCHAR(50) NOT NULL,
-	fk_per_id INT NOT NULL,
-	fk_com_id INT NOT NULL,
-	fk_cjd_id INT NOT NULL,
-	fk_ctn_id INT NOT NULL,
+	fk_per_id INT,
+	fk_com_id INT,
+	fk_cjd_id INT,
+	fk_ctn_id INT,
 
 	CONSTRAINT fk_per_id FOREIGN KEY (fk_per_id) REFERENCES EMPLEADO(per_id),
 	CONSTRAINT fk_com_id FOREIGN KEY (fk_com_id) REFERENCES PROVEEDOR(com_id),
@@ -783,10 +795,10 @@ CREATE TABLE TELEFONO (
 	tel_id SERIAL PRIMARY KEY,
 	tel_codigo_area VARCHAR(30) NOT NULL,
 	tel_numero VARCHAR(50) NOT NULL,
-	fk_per_id INT NOT NULL,
-	fk_com_id INT NOT NULL,
-	fk_cjd_id INT NOT NULL,
-	fk_ctn_id INT NOT NULL,
+	fk_per_id INT,
+	fk_com_id INT,
+	fk_cjd_id INT,
+	fk_ctn_id INT,
 
 	CONSTRAINT fk_per_id FOREIGN KEY (fk_per_id) REFERENCES EMPLEADO(per_id),
 	CONSTRAINT fk_com_id FOREIGN KEY (fk_com_id) REFERENCES PROVEEDOR(com_id),
@@ -800,10 +812,10 @@ CREATE TABLE TELEFONO (
 CREATE TABLE CORREO_ELECTRONICO (
 	cor_id SERIAL PRIMARY KEY,
 	cor_dir_correo VARCHAR(70) NOT NULL,
-	fk_per_id INT NOT NULL,
-	fk_com_id INT NOT NULL,
-	fk_cjd_id INT NOT NULL,
-	fk_ctn_id INT NOT NULL,
+	fk_per_id INT,
+	fk_com_id INT,
+	fk_cjd_id INT,
+	fk_ctn_id INT,
 
 	CONSTRAINT fk_per_id FOREIGN KEY (fk_per_id) REFERENCES EMPLEADO(per_id),
 	CONSTRAINT fk_com_id FOREIGN KEY (fk_com_id) REFERENCES PROVEEDOR(com_id),
@@ -880,6 +892,23 @@ CREATE TABLE MONEDA (
 	mon_valor_cambio INT NOT NULL,
 	mon_fecha_inicio DATE NOT NULL,
 	mon_fecha_fin DATE
+);
+
+CREATE TABLE PAGO (
+	pago_monto INT NOT NULL,
+	pago_fecha DATE NO NULL DEFAULT CURRENT_DATE,
+	fk_mon_id INT NOT NULL,
+	fk_met_id INT NOT NULL,
+	fk_pnn_id INT,
+	fk_spr_id INT,
+	fk_sct_id INT, 
+
+	CONSTRAINT pk_pago PRIMARY KEY (fk_mon_id, fk_met_id),
+	CONSTRAINT fk_met_id FOREIGN KEY (fk_met_id) REFERENCES METODO_PAGO(met_id) ON DELETE CASCADE,
+	CONSTRAINT fk_mon_id FOREIGN KEY (fk_mon_id) REFERENCES MONEDA(mon_id) ON DELETE CASCADE,
+	CONSTRAINT fk_pnn_id FOREIGN KEY (fk_pnn_id) REFERENCES PAGO_NOMINA(pnn_id) ON DELETE CASCADE,
+	CONSTRAINT fk_spr_id FOREIGN KEY (fk_spr_id) REFERENCES SOLICITUD_PROVEEDOR(spr_id) ON DELETE CASCADE,
+	CONSTRAINT fk_sct_id FOREIGN KEY (fk_sct_id) REFERENCES SOLICITUD_CLIENTE(sct_id) ON DELETE CASCADE,
 );
 
 
