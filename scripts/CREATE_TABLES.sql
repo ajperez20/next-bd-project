@@ -87,15 +87,15 @@ CREATE TABLE FASE_ENSAMBLE_AVION_CONF
 );
 
 -- 2.7 Modelo de Pieza (Configuración)
-CREATE TABLE MODELO_PIEZA_CONF
+CREATE TABLE TIPO_PIEZA_CONF
 (
-    mec_id           SERIAL PRIMARY KEY,
-    mec_nombre_pieza VARCHAR(50)  NOT NULL,
-    mec_descripcion  VARCHAR(255) NOT NULL
+    tpc_id          SERIAL PRIMARY KEY,
+    tpc_nombre      VARCHAR(50)  NOT NULL,
+    tpc_descripcion VARCHAR(255)
 );
 
 -- 2.8 Composición (Relación recursiva de piezas)
-CREATE TABLE COMPOSICION
+CREATE TABLE TIPO_PIEZA_CONF_COMPOSICION
 (
     cpn_cantidad INT NOT NULL,
     fk_compone   INT NOT NULL,
@@ -104,13 +104,26 @@ CREATE TABLE COMPOSICION
         PRIMARY KEY (fk_compone, fk_compuesta),
     CONSTRAINT fk_compuesta
         FOREIGN KEY (fk_compuesta)
-            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE,
+            REFERENCES TIPO_PIEZA_CONF (tpc_id) ON DELETE CASCADE,
     CONSTRAINT fk_compone
         FOREIGN KEY (fk_compone)
-            REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE
+            REFERENCES TIPO_PIEZA_CONF (tpc_id) ON DELETE CASCADE
 );
 
--- 2.9 Avión - Componente (Piezas que pertenecen a ciertos procesos de ensamble)
+-- 2.9 Modelo de Pieza (Configuración)
+CREATE TABLE MODELO_PIEZA_CONF
+(
+    mec_id           SERIAL PRIMARY KEY,
+    mec_nombre_pieza VARCHAR(50)  NOT NULL,
+    mec_descripcion  VARCHAR(255) NOT NULL,
+    fk_tpc_id        INT          NOT NULL,
+    CONSTRAINT fk_tpc_id
+        FOREIGN KEY (fk_tpc_id)
+            REFERENCES TIPO_PIEZA_CONF (tpc_id)
+            ON DELETE CASCADE
+);
+
+-- 2.10 Avión - Componente (Piezas que pertenecen a ciertos procesos de ensamble)
 CREATE TABLE AVION_COMPONENTE
 (
     ctm_cantidad_piezas INT NOT NULL,
@@ -127,7 +140,7 @@ CREATE TABLE AVION_COMPONENTE
             REFERENCES MODELO_PIEZA_CONF (mec_id) ON DELETE CASCADE
 );
 
--- 2.10 Prueba de Avión (Configuración)
+-- 2.11 Prueba de Avión (Configuración)
 CREATE TABLE PRUEBA_CONF
 (
     prc_id              SERIAL PRIMARY KEY,
@@ -135,7 +148,7 @@ CREATE TABLE PRUEBA_CONF
     prc_nombre_prueba   VARCHAR(50) NOT NULL
 );
 
--- 2.11 Modelo - Prueba (Configuración)
+-- 2.12 Modelo - Prueba (Configuración)
 CREATE TABLE MODELO_PRUEBA
 (
     fk_prc_id INT NOT NULL,
@@ -150,7 +163,7 @@ CREATE TABLE MODELO_PRUEBA
             REFERENCES PRUEBA_CONF (prc_id) ON DELETE CASCADE
 );
 
--- 2.12 Fase Prueba (Configuración)
+-- 2.13 Fase Prueba (Configuración)
 CREATE TABLE FASE_PRUEBA
 (
     fk_mda_id INT NOT NULL,
@@ -165,15 +178,15 @@ CREATE TABLE FASE_PRUEBA
             REFERENCES MODELO_AVION_CONF (mda_id) ON DELETE CASCADE
 );
 
--- 2.13 Característica de Pieza (Configuración)
+-- 2.14 Característica de Pieza (Configuración)
 CREATE TABLE CARACTERISTICA_PIEZA_CONF
 (
     pcc_id                    SERIAL PRIMARY KEY,
     pcc_nombre_caracteristica VARCHAR(255) NOT NULL
 );
 
--- 2.14 Relación Pieza - Característica
-CREATE TABLE PIEZA_CARACTERISTICA
+-- 2.15 Relación Pieza - Característica
+CREATE TABLE MODELO_PIEZA_CARACTERISTICA
 (
     pzi_unidad_medida VARCHAR(50),
     pzi_valor         INT,
@@ -189,7 +202,7 @@ CREATE TABLE PIEZA_CARACTERISTICA
             REFERENCES CARACTERISTICA_PIEZA_CONF (pcc_id) ON DELETE CASCADE
 );
 
--- 2.15 Material de Pieza (Configuración)
+-- 2.16 Material de Pieza (Configuración)
 CREATE TABLE MATERIAL_PIEZA_CONF
 (
     mac_id              SERIAL PRIMARY KEY,
@@ -197,7 +210,7 @@ CREATE TABLE MATERIAL_PIEZA_CONF
     mac_descripcion     VARCHAR(255) NOT NULL
 );
 
--- 2.16 Proceso Ensamble de Pieza (Configuración)
+-- 2.17 Proceso Ensamble de Pieza (Configuración)
 CREATE TABLE PROCESO_ENSAMBLE_PIEZA_CONF
 (
     epc_id              SERIAL PRIMARY KEY,
@@ -206,7 +219,7 @@ CREATE TABLE PROCESO_ENSAMBLE_PIEZA_CONF
     epc_descripcion     VARCHAR(255) NOT NULL
 );
 
--- 2.17 Fase Ensamble Pieza (Configuración)
+-- 2.18 Fase Ensamble Pieza (Configuración)
 CREATE TABLE FASE_ENSAMBLE_PIEZA_CONF
 (
     fk_mec_id INT NOT NULL,
@@ -221,7 +234,7 @@ CREATE TABLE FASE_ENSAMBLE_PIEZA_CONF
             REFERENCES PROCESO_ENSAMBLE_PIEZA_CONF (epc_id) ON DELETE CASCADE
 );
 
--- 2.18 Material Fase
+-- 2.19 Material Fase
 CREATE TABLE MATERIAL_FASE
 (
     mtf_cantidad_material INT         NOT NULL,
@@ -239,7 +252,7 @@ CREATE TABLE MATERIAL_FASE
             REFERENCES MATERIAL_PIEZA_CONF (mac_id) ON DELETE CASCADE
 );
 
--- 2.19 Materia Prima
+-- 2.20 Materia Prima
 CREATE TABLE MATERIA_PRIMA
 (
     rpm_id          SERIAL PRIMARY KEY,
