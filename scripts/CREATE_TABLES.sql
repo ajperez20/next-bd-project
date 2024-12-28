@@ -22,7 +22,7 @@ CREATE TABLE LUGAR
 CREATE TABLE TIPO_AVION
 (
     tiv_id          SERIAL PRIMARY KEY,
-    tiv_nombre      VARCHAR(50) NOT NULL,
+    tiv_nombre      VARCHAR(50)  NOT NULL,
     tiv_descripcion VARCHAR(255) NOT NULL
 );
 
@@ -37,9 +37,9 @@ CREATE TABLE CARACTERISTICA_ANV_CONF
 CREATE TABLE MODELO_AVION_CONF
 (
     mda_id          SERIAL PRIMARY KEY,
-    mda_nombre      VARCHAR(50) NOT NULL,
+    mda_nombre      VARCHAR(50)  NOT NULL,
     mda_descripcion VARCHAR(255) NOT NULL,
-    fk_tiv_id       INT         NOT NULL,
+    fk_tiv_id       INT          NOT NULL,
     CONSTRAINT fk_tiv_id
         FOREIGN KEY (fk_tiv_id)
             REFERENCES TIPO_AVION (tiv_id) ON DELETE CASCADE
@@ -65,10 +65,10 @@ CREATE TABLE MODELO_AVION_CARACTERISTICA
 -- 2.5 Proceso de Ensamble de Avión (Configuración)
 CREATE TABLE PROCESO_ENSAMBLE_AVION_CONF
 (
-    epv_id             SERIAL PRIMARY KEY,
-    epv_nombre_proceso VARCHAR(50) NOT NULL,
-    epv_tiempo_estimado INTERVAL NOT NULL,
-    epv_descripcion    VARCHAR(255) NOT NULL
+    epv_id              SERIAL PRIMARY KEY,
+    epv_nombre_proceso  VARCHAR(50)  NOT NULL,
+    epv_tiempo_estimado INTERVAL     NOT NULL,
+    epv_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 2.6 Fase de Ensamble de Avión (Configuración)
@@ -90,7 +90,7 @@ CREATE TABLE FASE_ENSAMBLE_AVION_CONF
 CREATE TABLE MODELO_PIEZA_CONF
 (
     mec_id           SERIAL PRIMARY KEY,
-    mec_nombre_pieza VARCHAR(50) NOT NULL,
+    mec_nombre_pieza VARCHAR(50)  NOT NULL,
     mec_descripcion  VARCHAR(255) NOT NULL
 );
 
@@ -130,9 +130,9 @@ CREATE TABLE AVION_COMPONENTE
 -- 2.10 Prueba de Avión (Configuración)
 CREATE TABLE PRUEBA_CONF
 (
-    prc_id            SERIAL PRIMARY KEY,
-    prc_tiempo_estimado INTERVAL NOT NULL,
-    prc_nombre_prueba VARCHAR(50) NOT NULL
+    prc_id              SERIAL PRIMARY KEY,
+    prc_tiempo_estimado INTERVAL    NOT NULL,
+    prc_nombre_prueba   VARCHAR(50) NOT NULL
 );
 
 -- 2.11 Modelo - Prueba (Configuración)
@@ -193,17 +193,17 @@ CREATE TABLE PIEZA_CARACTERISTICA
 CREATE TABLE MATERIAL_PIEZA_CONF
 (
     mac_id              SERIAL PRIMARY KEY,
-    mac_nombre_material VARCHAR(80) NOT NULL,
+    mac_nombre_material VARCHAR(80)  NOT NULL,
     mac_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 2.16 Proceso Ensamble de Pieza (Configuración)
 CREATE TABLE PROCESO_ENSAMBLE_PIEZA_CONF
 (
-    epc_id             SERIAL PRIMARY KEY,
-    epc_nombre_proceso VARCHAR(80) NOT NULL,
-    epc_tiempo_estimado INTERVAL NOT NULL,
-    epc_descripcion    VARCHAR(255) NOT NULL
+    epc_id              SERIAL PRIMARY KEY,
+    epc_nombre_proceso  VARCHAR(80)  NOT NULL,
+    epc_tiempo_estimado INTERVAL     NOT NULL,
+    epc_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 2.17 Fase Ensamble Pieza (Configuración)
@@ -302,10 +302,10 @@ CREATE TABLE ESTATUS
 -- 3.5 Prueba
 CREATE TABLE PRUEBA
 (
-    pru_id          SERIAL PRIMARY KEY,
-    pru_nombre      VARCHAR(100) NOT NULL,
-    pru_tiempo_estimado INTERVAL NOT NULL,
-    pru_descripcion VARCHAR(255) NOT NULL
+    pru_id              SERIAL PRIMARY KEY,
+    pru_nombre          VARCHAR(100) NOT NULL,
+    pru_tiempo_estimado INTERVAL     NOT NULL,
+    pru_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 3.6 Materia Prima Stock
@@ -349,7 +349,7 @@ CREATE TABLE SEDE_MATERIAL_PRUEBA
         FOREIGN KEY (fk_zon_id)
             REFERENCES ZONA (zon_id)
             ON DELETE CASCADE,
-   CONSTRAINT fk_pru_id
+    CONSTRAINT fk_pru_id
         FOREIGN KEY (fk_pru_id)
             REFERENCES PRUEBA (pru_id)
             ON DELETE CASCADE
@@ -381,9 +381,9 @@ CREATE TABLE ESTATUS_PMS
 -- 3.9 Proceso Ensamble Pieza (Ejecución)
 CREATE TABLE PROCESO_ENSAMBLE_PIEZA_EJEC
 (
-    esp_id          SERIAL PRIMARY KEY,
-    esp_tiempo_estimado INTERVAL NOT NULL,
-    esp_descripcion VARCHAR(255) NOT NULL
+    esp_id              SERIAL PRIMARY KEY,
+    esp_tiempo_estimado INTERVAL     NOT NULL,
+    esp_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 3.10 Fase Ensamble Pieza (Ejecución)
@@ -525,12 +525,12 @@ CREATE TABLE PIEZA_STOCK
 (
     pie_id                  SERIAL PRIMARY KEY,
     pie_numero_serial       VARCHAR(255) NOT NULL,
-    pie_nombre              VARCHAR(80) NOT NULL,
-    pie_fecha_fabricacion   DATE        NOT NULL DEFAULT CURRENT_DATE,
-    pie_cantidad_disponible INT         NOT NULL,
-    fk_sed_id               INT         NOT NULL,
-    fk_esp_id               INT         NOT NULL UNIQUE,
-    fk_zon_id               INT         NOT NULL UNIQUE,
+    pie_nombre              VARCHAR(80)  NOT NULL,
+    pie_fecha_fabricacion   DATE         NOT NULL DEFAULT CURRENT_DATE,
+    pie_cantidad_disponible INT          NOT NULL,
+    fk_sed_id               INT          NOT NULL,
+    fk_esp_id               INT          NOT NULL UNIQUE,
+    fk_zon_id               INT          NOT NULL UNIQUE,
     CONSTRAINT fk_sed_id
         FOREIGN KEY (fk_sed_id)
             REFERENCES SEDE_PLANTA (sed_id)
@@ -590,9 +590,9 @@ CREATE TABLE ESTATUS_PPS
 -- 3.19 Proceso Ensamble Avión (Ejecución)
 CREATE TABLE PROCESO_ENSAMBLE_AVION_EJEC
 (
-    eav_id          SERIAL PRIMARY KEY,
-    eav_tiempo_estimado INTERVAL NOT NULL,
-    eav_descripcion VARCHAR(255) NOT NULL
+    eav_id              SERIAL PRIMARY KEY,
+    eav_tiempo_estimado INTERVAL     NOT NULL,
+    eav_descripcion     VARCHAR(255) NOT NULL
 );
 
 -- 3.20 Fase Ensamble Avión
@@ -819,10 +819,10 @@ CREATE TABLE EMPLEADO
 -- 4.2 Equipo Encargado
 CREATE TABLE EQUIPO_ENCARGADO
 (
-    eqc_id          SERIAL      NOT NULL,
+    eqc_id          SERIAL       NOT NULL,
     eqc_descripcion VARCHAR(255) NOT NULL,
-    fk_zon_id       INT         NOT NULL,
-    fk_per_id       INT         NOT NULL,
+    fk_zon_id       INT          NOT NULL,
+    fk_per_id       INT          NOT NULL,
     CONSTRAINT pk_equi_encargado
         PRIMARY KEY (fk_zon_id, fk_per_id, eqc_id),
     CONSTRAINT fk_per_id
@@ -844,7 +844,7 @@ CREATE TABLE EXPERIENCIA
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
             REFERENCES EMPLEADO (per_id),
-   CONSTRAINT ck_fecha_fin
+    CONSTRAINT ck_fecha_fin
         CHECK (exp_fecha_fin > exp_fecha_inicio)
 );
 
@@ -877,9 +877,7 @@ CREATE TABLE PER_BEN
         FOREIGN KEY (fk_ben_id)
             REFERENCES BENEFICIARIO (ben_id),
     CONSTRAINT ck_parentezco
-        CHECK (
-            UPPER(prb_parentezco) in ('HERMAN@', 'PADRE', 'MADRE', 'OTRO')
-            )
+        CHECK (UPPER(prb_parentezco) in ('HERMAN@', 'PADRE', 'MADRE', 'OTRO'))
 );
 
 -- 4.6 Título
@@ -918,18 +916,17 @@ CREATE TABLE CLIENTE_NATURAL
     ctn_id                    SERIAL PRIMARY KEY,
     ctn_direccion             VARCHAR(255) NOT NULL,
     ctn_url_pagina            VARCHAR(255) NOT NULL,
-    ctn_fecha_ini_operaciones DATE        NOT NULL DEFAULT CURRENT_DATE,
-    ctn_dni                   VARCHAR(50) NOT NULL UNIQUE,
-    ctn_nombre                VARCHAR(50) NOT NULL,
-    ctn_apellido              VARCHAR(50) NOT NULL,
-    fk_lug_id                 INT         NOT NULL,
+    ctn_fecha_ini_operaciones DATE         NOT NULL DEFAULT CURRENT_DATE,
+    ctn_dni                   VARCHAR(50)  NOT NULL UNIQUE,
+    ctn_nombre                VARCHAR(50)  NOT NULL,
+    ctn_apellido              VARCHAR(50)  NOT NULL,
+    fk_lug_id                 INT          NOT NULL,
     CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
             REFERENCES LUGAR (lug_id),
     CONSTRAINT ck_ctn_dni
-        CHECK (ctn_dni ~ '^[VEJP]{1}[0-9]{9,10}$'
-)
-    );
+        CHECK (ctn_dni ~ '^[VEJP]{1}[0-9]{9,10}$')
+);
 
 -- 5.2 Cliente Jurídico
 CREATE TABLE CLIENTE_JURIDICO
@@ -937,19 +934,18 @@ CREATE TABLE CLIENTE_JURIDICO
     cjd_id                    SERIAL PRIMARY KEY,
     cjd_direccion             VARCHAR(255) NOT NULL,
     cjd_url_pagina            VARCHAR(255) NOT NULL,
-    cjd_fecha_ini_operaciones DATE        NOT NULL DEFAULT CURRENT_DATE,
-    cjd_rif                   VARCHAR(70) NOT NULL UNIQUE,
-    cjd_nombre                VARCHAR(50) NOT NULL,
-    cjd_descripcion           VARCHAR(70) NOT NULL,
-    fk_lug_id 				  INT 		  NOT NULL,
+    cjd_fecha_ini_operaciones DATE         NOT NULL DEFAULT CURRENT_DATE,
+    cjd_rif                   VARCHAR(70)  NOT NULL UNIQUE,
+    cjd_nombre                VARCHAR(50)  NOT NULL,
+    cjd_descripcion           VARCHAR(70)  NOT NULL,
+    fk_lug_id                 INT          NOT NULL,
     CONSTRAINT cjd_rif
-        CHECK (cjd_rif ~ '^[J]{1}[0-9]{9,10}$'
-),
-	CONSTRAINT fk_lug_id
+        CHECK (cjd_rif ~ '^[J]{1}[0-9]{9,10}$' ),
+    CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
             REFERENCES LUGAR (lug_id)
-	
-    );
+
+);
 
 -- 5.3 Solicitud Cliente
 CREATE TABLE SOLICITUD_CLIENTE
@@ -1024,7 +1020,7 @@ CREATE TABLE PROVEEDOR
     CONSTRAINT fk_mtp_id
         FOREIGN KEY (fk_mtp_id)
             REFERENCES PROVEEDOR_MP_STOCK (mtp_id),
-   CONSTRAINT fk_lug_id
+    CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
             REFERENCES LUGAR (lug_id)
 );
@@ -1053,10 +1049,10 @@ CREATE TABLE SOLICITUD_PROVEEDOR
 -- 6.4 Detalle Solicitud Proveedor
 CREATE TABLE DETALLE_SLD_PROVEEDOR
 (
-    dsp_cantidad      INT          NOT NULL,
+    dsp_cantidad      INT         NOT NULL,
     dsp_unidad_medida VARCHAR(50) NOT NULL,
-    fk_mtp_id         INT          NOT NULL,
-    fk_spr_id         INT          NOT NULL,
+    fk_mtp_id         INT         NOT NULL,
+    fk_spr_id         INT         NOT NULL,
     CONSTRAINT pk_dsp
         PRIMARY KEY (fk_mtp_id, fk_spr_id),
     CONSTRAINT fk_mtp_id
@@ -1124,23 +1120,15 @@ CREATE TABLE EMPLEADO_CARGO
 CREATE TABLE HORARIO
 (
     hor_id          SERIAL PRIMARY KEY,
-    hor_dia         VARCHAR(9) NOT NULL,
+    hor_dia         VARCHAR(9)             NOT NULL,
     hor_hora_inicio TIME WITHOUT TIME ZONE NOT NULL,
     hor_hora_fin    TIME WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT ck_hor_dia
-        CHECK (
-            UPPER(hor_dia) IN (
-                               'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'
-                )
-            ),
+        CHECK (UPPER(hor_dia) IN ('LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO')),
     CONSTRAINT hor_hora_inicio
-        CHECK (
-            CAST(hor_hora_inicio AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'
-) ,
+        CHECK (CAST(hor_hora_inicio AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'),
     CONSTRAINT hor_hora_fin
-        CHECK (
-            CAST(hor_hora_fin AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'
-        ),
+        CHECK (CAST(hor_hora_fin AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'),
     CONSTRAINT ck_horario
         CHECK (hor_hora_fin > hor_hora_inicio)
 );
@@ -1168,21 +1156,17 @@ CREATE TABLE ASISTENCIA
     asi_id          SERIAL PRIMARY KEY,
     asi_hora_inicio TIME WITHOUT TIME ZONE NOT NULL,
     asi_hora_fin    TIME WITHOUT TIME ZONE,
-    fk_per_id       INT NOT NULL,
-    fk_car_id       INT NOT NULL,
-    fk_emc_id       INT NOT NULL,
-    fk_hor_id       INT NOT NULL,
+    fk_per_id       INT                    NOT NULL,
+    fk_car_id       INT                    NOT NULL,
+    fk_emc_id       INT                    NOT NULL,
+    fk_hor_id       INT                    NOT NULL,
     CONSTRAINT fk_ech
         FOREIGN KEY (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id)
             REFERENCES EMP_CARGO_HORARIO (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id),
     CONSTRAINT asi_hora_inicio
-        CHECK (
-            CAST(asi_hora_inicio AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'
-) ,
+        CHECK (CAST(asi_hora_inicio AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'),
     CONSTRAINT asi_hora_fin
-        CHECK (
-            CAST(asi_hora_fin AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'
-        ),
+        CHECK (CAST(asi_hora_fin AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'),
     CONSTRAINT ck_asistencia
         CHECK (asi_hora_fin > asi_hora_inicio)
 );
@@ -1250,8 +1234,7 @@ CREATE TABLE TELEFONO
         FOREIGN KEY (fk_ctn_id)
             REFERENCES CLIENTE_NATURAL (ctn_id),
     CONSTRAINT ck_codigo_area
-        CHECK (tel_codigo_area ~ '^\+(?:[1-9]\d{0,2})$'
-) ,
+        CHECK (tel_codigo_area ~ '^\+(?:[1-9]\d{0,2})$'),
     CONSTRAINT ck_telefono
         CHECK (tel_numero ~ '^\d{7,10}$')
 );
@@ -1278,9 +1261,8 @@ CREATE TABLE CORREO_ELECTRONICO
         FOREIGN KEY (fk_ctn_id)
             REFERENCES CLIENTE_NATURAL (ctn_id),
     CONSTRAINT ck_correo
-        CHECK (cor_dir_correo ~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
-)
-    );
+        CHECK (cor_dir_correo ~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
+);
 
 --------------------------------------------------------------------------------
 -- 9. SISTEMA DE PRIVILEGIOS Y USUARIOS
@@ -1298,8 +1280,8 @@ CREATE TABLE PRIVILEGIO
 -- 9.2 Rol
 CREATE TABLE ROL
 (
-    rol_id     SERIAL PRIMARY KEY,
-    rol_nombre VARCHAR(30) NOT NULL,
+    rol_id          SERIAL PRIMARY KEY,
+    rol_nombre      VARCHAR(30) NOT NULL,
     rol_descripcion VARCHAR(255),
     CONSTRAINT ck_rol_nombre
         CHECK (UPPER(rol_nombre) in ('EMPLEADO', 'CLIENTE', 'PROVEEDOR', 'ADMINISTRADOR'))
@@ -1329,10 +1311,10 @@ CREATE TABLE USUARIO
     usu_email          VARCHAR(60) NOT NULL,
     fk_rol_id          INT         NOT NULL,
     fk_per_id          INT         NOT NULL,
-    fk_cjd_id	       INT         NOT NULL,
-    fk_ctn_id 		   INT         NOT NULL,
+    fk_cjd_id          INT         NOT NULL,
+    fk_ctn_id          INT         NOT NULL,
     fk_com_id          INT         NOT NULL,
-    
+
     CONSTRAINT fk_rol_id
         FOREIGN KEY (fk_rol_id)
             REFERENCES ROL (rol_id),
@@ -1348,7 +1330,7 @@ CREATE TABLE USUARIO
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id)
-    
+
 );
 
 --------------------------------------------------------------------------------
@@ -1368,8 +1350,7 @@ CREATE TABLE METODO_PAGO
     tdc_vencimiento       DATE,
     tipo_metodo           VARCHAR(60) NOT NULL,
     CONSTRAINT ck_denominacion
-        CHECK (efe_denominacion ~ '^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$'
-) ,
+        CHECK (efe_denominacion ~ '^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$'),
     CONSTRAINT ck_trf_num_transferencia
         CHECK (trf_num_transferencia ~ '^[0-9]{18}$'),
     CONSTRAINT ck_che_num_cheque
@@ -1386,7 +1367,7 @@ CREATE TABLE MONEDA
     mon_id           SERIAL PRIMARY KEY,
     mon_tipo         VARCHAR(20) NOT NULL,
     mon_valor_cambio INT         NOT NULL,
-    mon_fecha_inicio DATE        NOT NULL DEFAULT CURRENT_DATE, 
+    mon_fecha_inicio DATE        NOT NULL DEFAULT CURRENT_DATE,
     mon_fecha_fin    DATE
 );
 
