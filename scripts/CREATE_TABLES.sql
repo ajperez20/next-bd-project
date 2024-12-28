@@ -90,7 +90,7 @@ CREATE TABLE FASE_ENSAMBLE_AVION_CONF
 CREATE TABLE TIPO_PIEZA_CONF
 (
     tpc_id          SERIAL PRIMARY KEY,
-    tpc_nombre      VARCHAR(50)  NOT NULL,
+    tpc_nombre      VARCHAR(50) NOT NULL,
     tpc_descripcion VARCHAR(255)
 );
 
@@ -1323,10 +1323,10 @@ CREATE TABLE USUARIO
     usu_contrasena     VARCHAR(30) NOT NULL,
     usu_email          VARCHAR(60) NOT NULL,
     fk_rol_id          INT         NOT NULL,
-    fk_per_id          INT         NOT NULL,
-    fk_cjd_id          INT         NOT NULL,
-    fk_ctn_id          INT         NOT NULL,
-    fk_com_id          INT         NOT NULL,
+    fk_per_id          INT,
+    fk_cjd_id          INT,
+    fk_ctn_id          INT,
+    fk_com_id          INT,
 
     CONSTRAINT fk_rol_id
         FOREIGN KEY (fk_rol_id)
@@ -1343,7 +1343,6 @@ CREATE TABLE USUARIO
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id)
-
 );
 
 --------------------------------------------------------------------------------
