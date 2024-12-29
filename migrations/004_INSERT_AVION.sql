@@ -50,35 +50,35 @@ VALUES ('AU-87ABusiness', 'Variante del AU-87A diseñada para uso empresarial.',
 -- Inserción de datos: Característica de Avión
 -- ==============================================
 INSERT INTO CARACTERISTICA_ANV_CONF (pvv_nombre_caracteristica)
-VALUES ('Tripulación'),
-       ('Capacidad de pasajeros'),
-       ('Distancia entre asientos'),
-       ('Ancho de los asientos'),
-       ('Longitud'), 
-       ('Envergadura'),
-       ('Altura'),
-       ('Flecha alar'),
-       ('Ancho del fuselaje'),
-       ('Alto del fuselaje'),
-       ('Ancho de la cabina'),
-       ('Alto de la cabina'),
-       ('Peso vacío'),
-       ('Peso máximo de despegue'),
-       ('Peso máximo de aterrizaje'),
-       ('Volumen de carga'),
-       ('Carrera de despegue'),
-       ('Techo de servicio'),
-       ('Velocidad crucero'),
-       ('Velocidad máxima'),
-       ('Alcance'),
-       ('Máxima capacidad de combustible'),
-       ('Empuje máximo por motor'),
-       ('Empuje a velocidad crucero'),
-       ('Diámetro del álabes'),
-       ('Longitud del motor'),
-	   ('Cantidad de motores'),
-	   ('Superficie alar'),
-	   ('Régimen de asceso');
+VALUES ('Tripulación'), --id= 1
+       ('Capacidad de pasajeros'), --id= 2
+       ('Distancia entre asientos'), --id= 3
+       ('Ancho de los asientos'), --id= 4
+       ('Longitud'), --id= 5
+       ('Envergadura'), --id= 6
+       ('Altura'), --id= 7
+       ('Flecha alar'), --id= 8
+       ('Ancho del fuselaje'), --id= 9
+       ('Alto del fuselaje'), --id= 10
+       ('Ancho de la cabina'), --id= 11
+       ('Alto de la cabina'), --id= 12
+       ('Peso vacío'), --id= 13
+       ('Peso máximo de despegue'), --id= 14
+       ('Peso máximo de aterrizaje'), --id= 15
+       ('Volumen de carga'), --id= 16
+       ('Carrera de despegue'), --id= 17
+       ('Techo de servicio'), --id= 18
+       ('Velocidad crucero'), --id= 19
+       ('Velocidad máxima'), --id= 20
+       ('Alcance'), --id= 21
+       ('Máxima capacidad de combustible'), --id= 22
+       ('Empuje máximo por motor'), --id= 23
+       ('Empuje a velocidad crucero'), --id= 24
+       ('Diámetro del álabes'), --id= 25
+       ('Longitud del motor'), --id= 26
+	   ('Cantidad de motores'), --id= 27
+	   ('Superficie alar'), --id= 28
+	   ('Régimen de asceso'); --id= 29
 
 -- ==============================================
 -- Inserción de datos: Modelo Avión Característica
@@ -92,7 +92,7 @@ VALUES
 ('m', 12.9, 7, 1),
 ('kg', 55580, 13, 1),
 ('kg', 116570, 14, 1),
-('turborreactores', 4, 22, 1),
+('turborreactores', 4, 27, 1)
 ('kN', 75.6, 23, 1),
 ('km/h', 1000, 20, 1),
 ('km', 6820, 21, 1),
@@ -103,54 +103,102 @@ VALUES
 ('m', 46.7, 5, 2),
 ('m', 32.9, 6, 2),
 ('m', 10.4, 7, 2),
-('m2', 153, 8, 2),
 ('kg', 46700, 13, 2),
 ('kg', 95028, 14, 2),
-('turborreactores', 3, 22, 2),
-('kN', 77, 23, 2),
+('m', 13000, 18, 2),
 ('km/h', 907, 19, 2),
 ('km', 4450, 21, 2),
-('m', 13000, 18, 2),
-('m/s', 14.9, 26, 2),
+('kN', 77, 23, 2),
+('turborreactores', 3, 27, 2),
+('m2', 153, 28, 2),
+('m/s', 14.9, 29, 2),
 
 -- Características del AU-802
 ('tripulantes', 6, 1, 3),
 ('pasajeros', 118, 2, 3),
+('cm', 76, 3, 3),
+('cm', 43.7, 4, 3),
 ('m', 28.6, 5, 3),
 ('m', 28.3, 6, 3),
 ('m', 11.3, 7, 3),
+('mrad', 436, 8, 3),
+('m', 3.76, 9, 3),
+('m', 4.01, 10, 3),
+('m', 3.54, 11, 3),
+('m', 2.20, 12, 3),
 ('kg', 28120, 13, 3),
 ('kg', 49190, 14, 3),
+('kg', 45000, 15, 3),
+('m3', 18.4, 16, 3),
+('m', 1990, 17, 3),
+('m', 10700, 18, 3),
 ('km/h', 780, 19, 3),
+('km/h', 876, 20, 3),
 ('km', 3440, 21, 3),
 ('litros', 17860, 22, 3),
 ('kN', 84.5, 23, 3),
+('kN', 17.21, 24, 3),
+('m', 1.12, 25, 3),
+('m', 3.20, 26, 3),
+('turborreactores', 2, 27, 3),
 
 -- Características del AU-802A
 ('tripulantes', 6, 1, 4),
 ('pasajeros', 104, 2, 4),
+('cm', 76, 3, 4),
+('cm', 43.7, 4, 4),
 ('m', 36.5, 5, 4),
 ('m', 28.9, 6, 4),
 ('m', 11.1, 7, 4),
+('mrad', 436, 8, 4),
+('m', 3.76, 9, 4),
+('m', 4.01, 10, 4),
+('m', 3.54, 11, 4),
+('m', 2.20, 12, 4),
 ('kg', 33200, 13, 4),
 ('kg', 68050, 14, 4),
-('km/h', 828, 19, 4),
+('kg', 56250, 15, 4),
+('m3', 38.9, 16, 4),
+('m', 2540, 17, 4),
+('m', 11300, 18, 4),
+('km/h', 780, 19, 4),
+('km/h', 876, 20, 4),
 ('km', 4005, 21, 4),
 ('litros', 23170, 22, 4),
 ('kN', 98, 23, 4),
+('kN', 21.22, 24, 4),
+('m', 1.52, 25, 4),
+('m', 3.20, 26, 4),
+('turborreactores', 2, 27, 4),
 
 -- Características del AU-802B
 ('tripulantes', 6, 1, 5),
 ('pasajeros', 168, 2, 5),
+('cm', 76, 3, 5),
+('cm', 43.7, 4, 5),
 ('m', 31.1, 5, 5),
-('m', 35.7, 6, 5),
-('m', 12.6, 7, 5),
+('m', 28.9, 6, 5),
+('m', 11.1, 7, 5),
+('mrad', 436, 8, 5),
+('m', 3.76, 9, 5),
+('m', 4.01, 10, 5),
+('m', 3.54, 11, 5),
+('m', 2.20, 12, 5),
 ('kg', 31300, 13, 5),
 ('kg', 60550, 14, 5),
+('kg', 50000, 15, 5),
+('m3', 23.3, 16, 5),
+('m', 2470, 17, 5),
+('m', 11300, 18, 5),
 ('km/h', 823, 19, 5),
+('km/h', 780, 20, 5),
 ('km', 4445, 21, 5),
 ('litros', 23800, 22, 5),
 ('kN', 89, 23, 5),
+('kN', 21.80, 24, 5),
+('m', 1.52, 25, 5),
+('m', 2.36, 26, 5),
+('turborreactores', 2 , 27, 5),
 
 -- Características del AU-802C
 ('tripulantes', 6, 1, 6),
