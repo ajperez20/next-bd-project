@@ -14,6 +14,10 @@ CREATE TABLE LUGAR
             REFERENCES LUGAR (lug_id) ON DELETE CASCADE
 );
 
+-- Índice para optimizar consultas en fk_lug_id (relación jerárquica)
+CREATE INDEX idx_lugar_padre
+    ON LUGAR (fk_lug_id);
+
 --------------------------------------------------------------------------------
 -- 2. CONFIGURACIÓN DEL PROYECTO
 --------------------------------------------------------------------------------

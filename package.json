@@ -2,20 +2,23 @@
   "name": "next-db-project",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "npm run migrate && next dev --turbopack",
+    "migrate": "node ./src/db/migrations.js",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run migrate && next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@nextui-org/react": "^2.6.8",
+    "dotenv": "^16.4.7",
     "framer-motion": "^11.14.1",
     "next": "15.1.0",
     "next-db-project": "file:",
     "pg": "^8.13.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.1",
     "react-responsive-carousel": "^3.2.23",
     "validator": "^13.12.0"
