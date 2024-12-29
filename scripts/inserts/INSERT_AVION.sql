@@ -5,7 +5,8 @@ INSERT INTO TIPO_AVION (tiv_nombre, tiv_descripcion)
 VALUES ('AU-80', 'Modelo diseñado para rutas transcontinentales, equipado con 4 turborreactores.'),
        ('AU-801', 'Trimotor comercial útil para aeropuertos pequeños y rutas de alcance medio.'),
        ('AU-802', 'Modelo bimotor para rutas cortas y medianas con el mayor número de ventas en su categoría.'),
-       ('AU-747Plus', 'Avión transcontinental de fuselaje ancho con capacidad icónica.');
+       ('AU-747Plus', 'Avión transcontinental de fuselaje ancho con capacidad icónica.')
+	   ('AU-87A', 'Avión birreactor diseñado para rutas cortas y medias.');
 
 -- ==============================================
 -- Inserción de datos: Modelo de Avión
@@ -14,18 +15,20 @@ INSERT INTO MODELO_AVION_CONF (mda_nombre, mda_descripcion, fk_tiv_id)
 VALUES ('AU-80', 'Rutas largas con capacidad de 179 pasajeros.', 1),
        ('AU-801', 'Rutas cortas a medianas con capacidad de 189 pasajeros.', 2),
        ('AU-802', 'Modelo optimizado para rutas cortas a medianas con variantes adaptadas.', 3),
-       ('AU-747Plus', 'Transcontinental con capacidad para 524 pasajeros en dos clases.', 4);
+       ('AU-747Plus', 'Transcontinental con capacidad para 524 pasajeros en dos clases.', 4),
+	   ('AU-87A', 'Avión de pasajeros más vendido en la aviación civil.', 5);
+	   
 
 -- ==============================================
 -- Inserción de datos: Variantes del AU-802
 -- ==============================================
 INSERT INTO MODELO_AVION_CONF (mda_nombre, mda_descripcion, fk_tiv_id)
-VALUES ('AU-802A', 'Variante de menor capacidad con 118 pasajeros (1 clase densa).', 3),
+VALUES ('AU-802A', 'Variante de menor capacidad con 168 pasajeros (1 clase densa).', 3),
        ('AU-802B', 'Variante con capacidad intermedia para rutas cortas, 132 pasajeros.', 3),
-       ('AU-802C', 'Variante con capacidad de 159 pasajeros, diseñada para mayor confort.', 3),
-       ('AU-802D', 'Modelo adaptado con mayor capacidad, 189 pasajeros (alta densidad).', 3),
-       ('AU-802E', 'Modelo optimizado con un alcance mejorado y capacidad de 215 pasajeros.', 3),
-       ('AU-802F', 'Variante modernizada con capacidad para 204 pasajeros (1 clase densa).', 3);
+       ('AU-802C', 'Variante con capacidad de 132 pasajeros, diseñada para mayor alcance.', 3),
+       ('AU-802D', 'Modelo adaptado con capacidad de 149 pasajeros (alta densidad).', 3),
+       ('AU-802E', 'Modelo optimizado con un alcance mejorado y capacidad de 189 pasajeros.', 3),
+       ('AU-802F', 'Variante modernizada con capacidad para 215 pasajeros (1 clase densa).', 3);
 
 -- ==============================================
 -- Inserción de datos: Variantes del AU-747Plus
@@ -37,6 +40,13 @@ VALUES ('AU-747Platinium', 'Avión de pasillo único para recorridos medios.', 4
        ('AU-747SilverB', 'Variante con mayor capacidad de pasajeros y optimización estructural.', 4);
 
 -- ==============================================
+-- Inserción de datos: Variantes del AU-87A
+-- ==============================================
+INSERT INTO MODELO_AVION_CONF (mda_nombre, mda_descripcion, fk_tiv_id)
+VALUES ('AU-87ABusiness', 'Variante del AU-87A diseñada para uso empresarial.', 5);
+
+
+-- ==============================================
 -- Inserción de datos: Característica de Avión
 -- ==============================================
 INSERT INTO CARACTERISTICA_ANV_CONF (pvv_nombre_caracteristica)
@@ -44,7 +54,7 @@ VALUES ('Tripulación'),
        ('Capacidad de pasajeros'),
        ('Distancia entre asientos'),
        ('Ancho de los asientos'),
-       ('Longitud'),
+       ('Longitud'), 
        ('Envergadura'),
        ('Altura'),
        ('Flecha alar'),
@@ -64,8 +74,11 @@ VALUES ('Tripulación'),
        ('Máxima capacidad de combustible'),
        ('Empuje máximo por motor'),
        ('Empuje a velocidad crucero'),
-       ('Diámetro del motor'),
-       ('Longitud del motor');
+       ('Diámetro del álabes'),
+       ('Longitud del motor'),
+	   ('Cantidad de motores'),
+	   ('Superficie alar'),
+	   ('Régimen de asceso');
 
 -- ==============================================
 -- Inserción de datos: Modelo Avión Característica
