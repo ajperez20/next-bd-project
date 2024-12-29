@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.crsl {
-  width: 500px;
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-rgb: 255, 255, 255;
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-rgb));
 }
