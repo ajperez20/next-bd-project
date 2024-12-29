@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# UcabAir
+Sistema de gestión para la producción de aviones de UcabAir.
 
-First, run the development server:
+## Requisitos Previos
+- Node.js (ver versión en `.nvmrc`)
+- PostgreSQL
+- npm
 
+## Configuración del Entorno
+
+### Node.js
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+nvm use
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Instalación de dependencias
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Variables de entorno
+Copia el archivo de ejemplo y configura tus variables:
+```bash
+cp .env.sample .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ajusta las siguientes variables en el archivo `.env`:
+```env
+DB_USER=tu_usuario
+DB_HOST=localhost
+DB_NAME=ucabair_db
+DB_PASSWORD=tu_password
+DB_PORT=5432
+```
 
-## Learn More
+## Base de Datos
 
-To learn more about Next.js, take a look at the following resources:
+### Crear la base de datos
+```bash
+createdb ucabair_db
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Ejecutar migraciones
+```bash
+npm run migrate
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Desarrollo
 
-## Deploy on Vercel
+Para iniciar el servidor de desarrollo:
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+La aplicación estará disponible en: [http://localhost:3000](http://localhost:3000)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts Disponibles
+- `npm run dev`: Inicia el servidor de desarrollo
+- `npm run build`: Construye la aplicación para producción
+- `npm start`: Inicia la aplicación en modo producción
+- `npm run migrate`: Ejecuta las migraciones de la base de datos
+
+## Tecnologías Principales
+- Next.js 14
+- PostgreSQL
+- Tailwind CSS
+- React
+- Node.js
+
+## Autor
+Arturo Jose Perez Diaz
+
+## Licencia
+Este proyecto es privado y de uso exclusivo para Ucab.

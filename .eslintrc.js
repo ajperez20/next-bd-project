@@ -1,44 +1,48 @@
 module.exports = {
-    extends: [
-        'next/core-web-vitals',
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-        'plugin:jsx-a11y/recommended'
+  extends: [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+  ],
+  plugins: ["react", "react-hooks", "jsx-a11y", "prettier"],
+  rules: {
+    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off", // Not needed in Next.js
+    "react/prop-types": "off", // If you're not using PropTypes
+    "no-unused-vars": [
+      "warn",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+      },
     ],
-    plugins: [
-        'react',
-        'react-hooks',
-        'jsx-a11y'
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        components: ["Link"],
+        specialLink: ["hrefLeft", "hrefRight"],
+        aspects: ["invalidHref", "preferButton"],
+      },
     ],
-    rules: {
-        'react/react-in-jsx-scope': 'off', // Not needed in Next.js
-        'react/prop-types': 'off', // If you're not using PropTypes
-        'no-unused-vars': ['warn', {
-            'argsIgnorePattern': '^_',
-            'varsIgnorePattern': '^_'
-        }],
-        'jsx-a11y/anchor-is-valid': ['error', {
-            'components': ['Link'],
-            'specialLink': ['hrefLeft', 'hrefRight'],
-            'aspects': ['invalidHref', 'preferButton']
-        }]
+  },
+  settings: {
+    react: {
+      version: "detect",
     },
-    settings: {
-        react: {
-            version: 'detect'
-        }
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
     },
-    env: {
-        browser: true,
-        node: true,
-        es6: true
-    },
-    parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        ecmaFeatures: {
-            jsx: true
-        }
-    }
+  },
 };
