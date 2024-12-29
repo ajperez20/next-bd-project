@@ -5,9 +5,9 @@ INSERT INTO TIPO_AVION (tiv_nombre, tiv_descripcion)
 VALUES ('AU-80', 'Modelo diseñado para rutas transcontinentales, equipado con 4 turborreactores.'),
        ('AU-801', 'Trimotor comercial útil para aeropuertos pequeños y rutas de alcance medio.'),
        ('AU-802', 'Modelo bimotor para rutas cortas y medianas con el mayor número de ventas en su categoría.'),
-       ('AU-747Plus', 'Avión transcontinental de fuselaje ancho con capacidad icónica.')
+       ('AU-747Plus', 'Avión transcontinental de fuselaje ancho con capacidad icónica.'),
 	   ('AU-87A', 'Avión birreactor diseñado para rutas cortas y medias.');
-
+	  
 -- ==============================================
 -- Inserción de datos: Modelo de Avión
 -- ==============================================
@@ -18,7 +18,6 @@ VALUES ('AU-80', 'Rutas largas con capacidad de 179 pasajeros.', 1),
        ('AU-747Plus', 'Transcontinental con capacidad para 524 pasajeros en dos clases.', 4),
 	   ('AU-87A', 'Avión de pasajeros más vendido en la aviación civil.', 5);
 	   
-
 -- ==============================================
 -- Inserción de datos: Variantes del AU-802
 -- ==============================================
@@ -79,7 +78,7 @@ VALUES ('Tripulación'), --id= 1
 	   ('Cantidad de motores'), --id= 27
 	   ('Superficie alar'), --id= 28
 	   ('Régimen de asceso'); --id= 29
-
+	  
 -- ==============================================
 -- Inserción de datos: Modelo Avión Característica
 -- ==============================================
@@ -92,7 +91,7 @@ VALUES
 ('m', 12.9, 7, 1),
 ('kg', 55580, 13, 1),
 ('kg', 116570, 14, 1),
-('turborreactores', 4, 27, 1)
+('turborreactores', 4, 27, 1),
 ('kN', 75.6, 23, 1),
 ('km/h', 1000, 20, 1),
 ('km', 6820, 21, 1),
@@ -388,7 +387,7 @@ VALUES
 -- Características del AU-747SilverB
 ('tripulantes', 2, 1, 15),
 ('pasajeros', 567, 2, 15),
-('m', 76,4, 5, 15),
+('m', 76.4, 5, 15),
 ('m', 68.5, 6, 15),
 ('m', 19.4, 7, 15),
 ('kg', 186000, 13, 15),
@@ -408,4 +407,4 @@ VALUES
 
 -- Características del AU-87A Business
 ('pasajeros', 320, 2, 16),
-('turborreactores', 2, 27, 16),
+('turborreactores', 2, 27, 16);
