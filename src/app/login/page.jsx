@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,6 +31,12 @@ export default function LoginPage() {
           <p className="text-xl text-blue-100">
             Sistema de Gestión de Producción de Aviones
           </p>
+          <Link
+            href="/login/about"
+            className="inline-block mt-4 text-blue-100 hover:text-white hover:underline transition-colors"
+          >
+            Conoce más sobre nosotros →
+          </Link>
         </div>
       </div>
 
@@ -101,9 +108,18 @@ export default function LoginPage() {
               </div>
             </form>
           </div>
+
           {/* Footer */}
-          <div className="mt-6 text-center text-sm text-gray-500">
-            © 2024 UcabAir. Todos los derechos reservados.
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-gray-500">
+              © 2024 UcabAir. Todos los derechos reservados.
+            </p>
+            <Link
+              href="/login/about"
+              className="text-sm text-blue-600 hover:text-blue-700 md:hidden"
+            >
+              Conoce más sobre nosotros →
+            </Link>
           </div>
         </div>
       </div>
