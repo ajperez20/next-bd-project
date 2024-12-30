@@ -409,3 +409,5 @@ VALUES
 -- Características del AU-87A Business
 ('pasajeros', 320, 2, 16),
 ('turborreactores', 2, 27, 16);
+
+-- ==============================================

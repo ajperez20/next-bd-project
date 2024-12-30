@@ -7,32 +7,31 @@ export async function POST(request) {
     const user = await authService.login(email, password);
 
     if (user) {
+      // Formatear la respuesta
+      const userData = {
+        id: user.usu_id,
+        username: user.usu_nombre_usuario,
+        email: user.usu_email,
+        role: user.rol_nombre,
+        roleDescription: user.rol_descripcion,
+        privileges: user.privilegios,
+        displayName: user.nombre_completo,
+      };
+
       return NextResponse.json({
         success: true,
-        user,
+        user: userData,
       });
     }
 
     return NextResponse.json(
-      {
-        success: false,
-        error: {
-          status: 401,
-          message: "Credenciales inválidas",
-        },
-      },
+      { success: false, message: "Credenciales inválidas" },
       { status: 401 },
     );
   } catch (error) {
+    console.error("Error en login:", error);
     return NextResponse.json(
-      {
-        success: false,
-        error: {
-          status: 500,
-          message: "Error en el servidor",
-          details: error.message,
-        },
-      },
+      { success: false, message: "Error en el servidor" },
       { status: 500 },
     );
   }

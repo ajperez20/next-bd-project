@@ -149,7 +149,7 @@ CREATE TABLE PRUEBA_CONF
 (
     prc_id              SERIAL PRIMARY KEY,
     prc_tiempo_estimado INTERVAL    NOT NULL,
-    prc_nombre_prueba   VARCHAR(50) NOT NULL
+    prc_nombre_prueba   VARCHAR(255) NOT NULL
 );
 
 -- 2.12 Modelo - Prueba (Configuración)

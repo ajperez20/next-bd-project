@@ -1,50 +1,137 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   HomeIcon,
   UserGroupIcon,
   CubeIcon,
+  WrenchScrewdriverIcon,
+  TruckIcon,
+  ClipboardDocumentListIcon,
+  UserIcon,
+  DocumentChartBarIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: HomeIcon,
-  },
-  {
-    name: "RRHH",
-    href: "/dashboard/rrhh",
-    icon: UserGroupIcon,
-    submenu: [
-      {
-        name: "Empleados",
-        href: "/dashboard/rrhh/empleados",
-      },
-      {
-        name: "Departamentos",
-        href: "/dashboard/rrhh/departamentos",
-      },
-      {
-        name: "Nómina",
-        href: "/dashboard/rrhh/nomina",
-      },
-    ],
-  },
-  {
-    name: "Producción",
-    href: "/produccion",
-    icon: CubeIcon,
-  },
-];
+// Definir las opciones de navegación según el rol
+const navigationConfig = {
+  ADMINISTRADOR: [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: HomeIcon,
+    },
+    {
+      name: "RRHH",
+      href: "/dashboard/rrhh",
+      icon: UserGroupIcon,
+      submenu: [
+        {
+          name: "Empleados",
+          href: "/dashboard/rrhh/empleados",
+        },
+        {
+          name: "Departamentos",
+          href: "/dashboard/rrhh/departamentos",
+        },
+      ],
+    },
+    {
+      name: "Producción",
+      href: "/dashboard/produccion",
+      icon: CubeIcon,
+    },
+    {
+      name: "Proveedores",
+      href: "/dashboard/proveedores",
+      icon: TruckIcon,
+    },
+    {
+      name: "Inventario",
+      href: "/dashboard/inventario",
+      icon: ClipboardDocumentListIcon,
+    },
+    {
+      name: "Clientes",
+      href: "/dashboard/clientes",
+      icon: UserIcon,
+    },
+    {
+      name: "Reportes",
+      href: "/dashboard/reportes",
+      icon: DocumentChartBarIcon,
+    },
+  ],
+  EMPLEADO: [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: HomeIcon,
+    },
+    {
+      name: "Producción",
+      href: "/dashboard/produccion",
+      icon: CubeIcon,
+    },
+    {
+      name: "Mantenimiento",
+      href: "/dashboard/mantenimiento",
+      icon: WrenchScrewdriverIcon,
+    },
+  ],
+  PROVEEDOR: [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: HomeIcon,
+    },
+    {
+      name: "Mis Pedidos",
+      href: "/dashboard/pedidos",
+      icon: ClipboardDocumentListIcon,
+    },
+    {
+      name: "Entregas",
+      href: "/dashboard/entregas",
+      icon: TruckIcon,
+    },
+  ],
+  CLIENTE: [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: HomeIcon,
+    },
+    {
+      name: "Mis Pedidos",
+      href: "/dashboard/pedidos",
+      icon: ClipboardDocumentListIcon,
+    },
+    {
+      name: "Seguimiento",
+      href: "/dashboard/seguimiento",
+      icon: DocumentChartBarIcon,
+    },
+  ],
+};
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [openSubmenu, setOpenSubmenu] = useState("");
+  const [navigation, setNavigation] = useState([]);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      // Establecer navegación según el rol
+      setNavigation(navigationConfig[parsedUser.role] || []);
+    }
+  }, []);
 
   const toggleSubmenu = (name) => {
     setOpenSubmenu(openSubmenu === name ? "" : name);
@@ -65,6 +152,14 @@ export default function Sidebar() {
           <span className="text-white text-xl font-bold">UcabAir</span>
         </div>
 
+        {/* User Info */}
+        <div className="px-6 py-4 border-b border-gray-200">
+          <p className="text-sm font-medium text-gray-900">
+            {user?.displayName}
+          </p>
+          <p className="text-xs text-gray-500">{user?.role}</p>
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
           {navigation.map((item) => {
@@ -78,7 +173,7 @@ export default function Sidebar() {
                     onClick={() => toggleSubmenu(item.name)}
                     onKeyDown={(e) => handleKeyDown(e, item.name)}
                     className={`
-                                            w-full flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 cursor-pointer
+                                            w-full flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
                                             ${isActive ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : ""}
                                         `}
                   >
