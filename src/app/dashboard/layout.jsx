@@ -7,7 +7,7 @@ export default function DashboardLayout({ children }) {
       <SideBar />
       <div className="ml-64">
         <NavBar />
-        <main className="p-8 pt-24 bg-gray-50 min-h-screen">{children}</main>
+        <main className="p-8 pt-8 bg-gray-50 min-h-screen">{children}</main>
       </div>
     </div>
   );

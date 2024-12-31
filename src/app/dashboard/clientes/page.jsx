@@ -1,237 +1,187 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import DataList from "@/components/DataList";
-import EditModal from "@/components/EditModal";
+import Link from "next/link";
+import { useClientesStats } from "@/hooks/useClientesStats";
+import {
+  UserIcon,
+  BuildingOfficeIcon,
+  ArrowRightIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 
-const columns = [
-  { key: "ctn_dni", label: "DNI" },
-  { key: "ctn_nombre", label: "Nombre" },
-  { key: "ctn_apellido", label: "Apellido" },
-  { key: "ctn_direccion", label: "Dirección" },
-  { key: "ctn_url_pagina", label: "Página Web" },
-  {
-    key: "ctn_fecha_ini_operaciones",
-    label: "Inicio Operaciones",
-    format: (value) => new Date(value).toLocaleDateString(),
-  },
-  { key: "lugar_completo", label: "Ubicación" },
-];
-
-const defaultClienteNatural = {
-  ctn_nombre: "",
-  ctn_apellido: "",
-  ctn_dni: "",
-  ctn_direccion: "",
-  ctn_url_pagina: "",
-  ctn_fecha_ini_operaciones: new Date().toISOString().split("T")[0],
-  fk_lug_id: "",
-};
-
-export default function ClientesNaturalesPage() {
-  const [clientes, setClientes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [currentCliente, setCurrentCliente] = useState(null);
-  const [formFields, setFormFields] = useState([
-    {
-      name: "ctn_dni",
-      label: "DNI",
-      type: "text",
-      required: true,
-      placeholder: "V12345678",
-      description: "DNI del cliente (formato: V12345678)",
-    },
-    {
-      name: "ctn_nombre",
-      label: "Nombre",
-      type: "text",
-      required: true,
-      placeholder: "Nombre del cliente",
-    },
-    {
-      name: "ctn_apellido",
-      label: "Apellido",
-      type: "text",
-      required: true,
-      placeholder: "Apellido del cliente",
-    },
-    {
-      name: "ctn_direccion",
-      label: "Dirección",
-      type: "text",
-      required: true,
-      placeholder: "Dirección completa",
-    },
-    {
-      name: "ctn_url_pagina",
-      label: "Página Web",
-      type: "url",
-      required: true,
-      placeholder: "https://ejemplo.com",
-    },
-    {
-      name: "ctn_fecha_ini_operaciones",
-      label: "Inicio de Operaciones",
-      type: "date",
-      required: true,
-    },
-    {
-      name: "fk_lug_id",
-      label: "Ubicación",
-      type: "select",
-      required: true,
-      options: [],
-    },
-  ]);
-
-  useEffect(() => {
-    fetchClientes();
-    fetchLugares();
-  }, []);
-
-  const fetchClientes = async () => {
-    try {
-      const response = await fetch("/api/clientes/naturales");
-      if (!response.ok) throw new Error("Error al cargar clientes");
-      const data = await response.json();
-
-      const formattedData = data.map((cliente) => ({
-        id: cliente.ctn_id,
-        ...cliente,
-      }));
-
-      setClientes(formattedData);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchLugares = async () => {
-    try {
-      const response = await fetch("/api/lugares");
-      if (!response.ok) throw new Error("Error al cargar lugares");
-      const lugares = await response.json();
-
-      setFormFields((currentFields) =>
-        currentFields.map((field) => {
-          if (field.name === "fk_lug_id") {
-            return {
-              ...field,
-              options: lugares.map((lugar) => ({
-                value: lugar.lug_id,
-                label: lugar.lugar_completo,
-                level: lugar.level,
-              })),
-            };
-          }
-          return field;
-        }),
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleEdit = (cliente) => {
-    if (cliente) {
-      const formattedCliente = {
-        ctn_id: cliente.id,
-        ctn_nombre: cliente.ctn_nombre,
-        ctn_apellido: cliente.ctn_apellido,
-        ctn_dni: cliente.ctn_dni,
-        ctn_direccion: cliente.ctn_direccion,
-        ctn_url_pagina: cliente.ctn_url_pagina,
-        ctn_fecha_ini_operaciones: new Date(cliente.ctn_fecha_ini_operaciones)
-          .toISOString()
-          .split("T")[0],
-        fk_lug_id: cliente.fk_lug_id,
-      };
-      setCurrentCliente(formattedCliente);
-    } else {
-      setCurrentCliente(defaultClienteNatural);
-    }
-    setShowModal(true);
-  };
-
-  const handleDelete = async (cliente) => {
-    if (!confirm("¿Está seguro de eliminar este cliente?")) return;
-
-    try {
-      const response = await fetch(`/api/clientes/naturales/${cliente.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error?.message || "Error al eliminar cliente");
-      }
-
-      fetchClientes();
-    } catch (error) {
-      console.error("Error:", error);
-      alert(error.message);
-    }
-  };
-
-  const handleSave = async (formData) => {
-    try {
-      const url = formData.ctn_id
-        ? `/api/clientes/naturales/${formData.ctn_id}`
-        : "/api/clientes/naturales";
-
-      const response = await fetch(url, {
-        method: formData.ctn_id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error?.message || "Error al guardar cliente");
-      }
-
-      setShowModal(false);
-      fetchClientes();
-    } catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+export default function ClientesPage() {
+  const {
+    totalClientes,
+    clientesNaturales,
+    clientesJuridicos,
+    isLoading,
+    error,
+  } = useClientesStats();
 
   return (
     <div className="space-y-6">
-      <DataList
-        data={clientes}
-        columns={columns}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        title="Clientes Naturales"
-      />
+      {/* Encabezado */}
+      <div className="border-b border-gray-200 pb-4">
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Gestión de Clientes
+        </h1>
+        <p className="mt-2 text-sm text-gray-600">
+          Administre los clientes naturales y jurídicos de la empresa
+        </p>
+      </div>
 
-      <EditModal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false);
-          setCurrentCliente(null);
-        }}
-        onSave={handleSave}
-        data={currentCliente}
-        fields={formFields}
-        title="Cliente Natural"
-      />
+      {/* Tarjetas de navegación */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Tarjeta de Clientes Naturales */}
+        <div className="bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200">
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <UserIcon className="h-8 w-8 text-blue-600" />
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Clientes Naturales
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Gestione los clientes individuales
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                  {isLoading ? "..." : clientesNaturales} registros
+                </span>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Link
+                href="/dashboard/clientes/naturales"
+                className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Gestionar
+                <ArrowRightIcon className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+          <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <span>Registro de clientes individuales</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Tarjeta de Clientes Jurídicos */}
+        <div className="bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200">
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <BuildingOfficeIcon className="h-8 w-8 text-indigo-600" />
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Clientes Jurídicos
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Gestione las empresas cliente
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full">
+                  {isLoading ? "..." : clientesJuridicos} registros
+                </span>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Link
+                href="/dashboard/clientes/juridicos"
+                className="inline-flex items-center px-4 py-2 border border-indigo-600 text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Gestionar
+                <ArrowRightIcon className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+          <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <span>Registro de empresas cliente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Estadísticas */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-blue-100">
+              <UsersIcon className="h-6 w-6 text-blue-600" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg font-medium text-gray-900">
+                Total Clientes
+              </h3>
+              <p className="text-sm text-gray-500">Todos los registros</p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="text-2xl font-semibold text-gray-900">
+              {isLoading ? "..." : totalClientes}
+            </div>
+            <div className="text-sm text-gray-600">Clientes registrados</div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-blue-100">
+              <UserIcon className="h-6 w-6 text-blue-600" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg font-medium text-gray-900">
+                Clientes Naturales
+              </h3>
+              <p className="text-sm text-gray-500">Personas registradas</p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="text-2xl font-semibold text-gray-900">
+              {isLoading ? "..." : clientesNaturales}
+            </div>
+            <div className="text-sm text-gray-600">Registros activos</div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-indigo-100">
+              <BuildingOfficeIcon className="h-6 w-6 text-indigo-600" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg font-medium text-gray-900">
+                Clientes Jurídicos
+              </h3>
+              <p className="text-sm text-gray-500">Empresas registradas</p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="text-2xl font-semibold text-gray-900">
+              {isLoading ? "..." : clientesJuridicos}
+            </div>
+            <div className="text-sm text-gray-600">Registros activos</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mensaje de error */}
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 text-red-600 rounded-md">
+          {error}
+        </div>
+      )}
     </div>
   );
 }

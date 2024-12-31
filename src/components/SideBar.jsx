@@ -7,7 +7,7 @@ import {
   HomeIcon,
   UserGroupIcon,
   CubeIcon,
-  WrenchScrewdriverIcon,
+  BriefcaseIcon,
   TruckIcon,
   ClipboardDocumentListIcon,
   UserIcon,
@@ -15,7 +15,6 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 
-// Definir las opciones de navegación según el rol
 const navigationConfig = {
   ADMINISTRADOR: [
     {
@@ -26,7 +25,7 @@ const navigationConfig = {
     {
       name: "RRHH",
       href: "/dashboard/rrhh",
-      icon: UserGroupIcon,
+      icon: BriefcaseIcon,
       submenu: [
         {
           name: "Empleados",
@@ -38,7 +37,22 @@ const navigationConfig = {
         },
         {
           name: "Horarios",
-          href: "/dashboard/rrhh/cargos",
+          href: "/dashboard/rrhh/horarios",
+        },
+        {
+          name: "Nominas",
+          href: "/dashboard/rrhh/nominas",
+        },
+      ],
+    },
+    {
+      name: "Usuarios",
+      href: "/dashboard/usuarios",
+      icon: UserGroupIcon,
+      submenu: [
+        {
+          name: "Roles",
+          href: "/dashboard/usuarios/roles",
         },
       ],
     },
@@ -67,7 +81,7 @@ const navigationConfig = {
           href: "/dashboard/clientes/naturales",
         },
         {
-          name: "Juridicos",
+          name: "Jurídicos",
           href: "/dashboard/clientes/juridicos",
         },
       ],
@@ -137,7 +151,6 @@ export default function Sidebar() {
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser(parsedUser);
-      // Establecer navegación según el rol
       setNavigation(navigationConfig[parsedUser.role] || []);
     }
   }, []);
@@ -146,11 +159,22 @@ export default function Sidebar() {
     setOpenSubmenu(openSubmenu === name ? "" : name);
   };
 
-  const handleKeyDown = (event, name) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      toggleSubmenu(name);
+  const isPathActive = (href, submenu = null) => {
+    // Si es un elemento con submenu, verifica si la ruta actual coincide con el href principal
+    // o con alguna de las subrutas
+    if (submenu) {
+      return (
+        pathname === href ||
+        submenu.some((item) => pathname.startsWith(item.href)) ||
+        pathname.startsWith(href)
+      );
     }
+    // Para elementos sin submenu, verifica exactamente la ruta
+    return pathname === href;
+  };
+
+  const isExactPathActive = (href) => {
+    return pathname === href;
   };
 
   return (
@@ -172,45 +196,54 @@ export default function Sidebar() {
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
           {navigation.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive = isPathActive(item.href, item.submenu);
             const isOpen = openSubmenu === item.name;
 
             return (
               <div key={item.name}>
                 {item.submenu ? (
-                  <button
-                    onClick={() => toggleSubmenu(item.name)}
-                    onKeyDown={(e) => handleKeyDown(e, item.name)}
-                    className={`
-                                            w-full flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
-                                            ${isActive ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : ""}
-                                        `}
-                  >
-                    <item.icon
-                      className={`h-5 w-5 mr-3 ${
-                        isActive ? "text-blue-600" : "text-gray-400"
-                      }`}
-                    />
-                    <span className="text-sm font-medium flex-1">
-                      {item.name}
-                    </span>
-                    <ChevronDownIcon
-                      className={`h-4 w-4 transform transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+                  <div className="flex items-center">
+                    <Link
+                      href={item.href}
+                      className={`
+                        flex-1 flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
+                        ${isActive ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : ""}
+                      `}
+                    >
+                      <item.icon
+                        className={`h-5 w-5 mr-3 ${
+                          isActive ? "text-blue-600" : "text-gray-400"
+                        }`}
+                      />
+                      <span className="text-sm font-medium">{item.name}</span>
+                    </Link>
+                    <button
+                      onClick={() => toggleSubmenu(item.name)}
+                      className={`
+                        px-4 h-full flex items-center justify-center hover:bg-gray-100
+                        ${isActive ? "bg-blue-50 text-blue-600" : "text-gray-400"}
+                      `}
+                    >
+                      <ChevronDownIcon
+                        className={`h-4 w-4 transform transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
                 ) : (
                   <Link
                     href={item.href}
                     className={`
-                                            flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
-                                            ${isActive ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : ""}
-                                        `}
+                      flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100
+                      ${isExactPathActive(item.href) ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : ""}
+                    `}
                   >
                     <item.icon
                       className={`h-5 w-5 mr-3 ${
-                        isActive ? "text-blue-600" : "text-gray-400"
+                        isExactPathActive(item.href)
+                          ? "text-blue-600"
+                          : "text-gray-400"
                       }`}
                     />
                     <span className="text-sm font-medium">{item.name}</span>
@@ -219,21 +252,21 @@ export default function Sidebar() {
 
                 {/* Submenu */}
                 {item.submenu && isOpen && (
-                  <div className="bg-gray-50 pl-12">
+                  <div className="bg-gray-50">
                     {item.submenu.map((subitem) => {
-                      const isSubActive = pathname === subitem.href;
+                      const isSubActive = isExactPathActive(subitem.href);
                       return (
                         <Link
                           key={subitem.name}
                           href={subitem.href}
                           className={`
-                                                        flex items-center py-2 px-4 text-sm
-                                                        ${
-                                                          isSubActive
-                                                            ? "text-blue-600 font-medium"
-                                                            : "text-gray-600 hover:text-gray-900"
-                                                        }
-                                                    `}
+                            flex items-center py-2 px-12 text-sm transition-colors duration-150
+                            ${
+                              isSubActive
+                                ? "text-blue-600 font-medium bg-blue-50"
+                                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                            }
+                          `}
                         >
                           <span>{subitem.name}</span>
                         </Link>
