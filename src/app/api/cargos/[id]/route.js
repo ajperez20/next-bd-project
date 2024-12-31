@@ -1,27 +1,27 @@
 import { NextResponse } from "next/server";
-import { employeeService } from "@/services/employeeService";
+import { cargoService } from "@/services/cargoService";
 
 export async function GET(request, { params }) {
   try {
-    const empleado = await employeeService.getById(params.id);
-    if (!empleado) {
+    const cargo = await cargoService.getById(params.id);
+    if (!cargo) {
       return NextResponse.json(
         {
           error: {
             status: 404,
-            message: "Empleado no encontrado",
+            message: "Cargo no encontrado",
           },
         },
         { status: 404 },
       );
     }
-    return NextResponse.json(empleado);
+    return NextResponse.json(cargo);
   } catch (error) {
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al obtener el empleado",
+          message: "Error al obtener el cargo",
           details: error.message,
         },
       },
@@ -32,15 +32,15 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
-    const empleado = await request.json();
-    const updatedEmpleado = await employeeService.update(params.id, empleado);
-    return NextResponse.json(updatedEmpleado);
+    const cargo = await request.json();
+    const updatedCargo = await cargoService.update(params.id, cargo);
+    return NextResponse.json(updatedCargo);
   } catch (error) {
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al actualizar el empleado",
+          message: "Error al actualizar el cargo",
           details: error.message,
         },
       },
@@ -51,15 +51,14 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    await employeeService.delete(params.id);
-    return NextResponse.json({ message: "Empleado eliminado exitosamente" });
+    await cargoService.delete(params.id);
+    return NextResponse.json({ message: "Cargo eliminado exitosamente" });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al eliminar el empleado",
+          message: "Error al eliminar el cargo",
           details: error.message,
         },
       },

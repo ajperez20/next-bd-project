@@ -33,8 +33,8 @@ const navigationConfig = {
           href: "/dashboard/rrhh/empleados",
         },
         {
-          name: "Departamentos",
-          href: "/dashboard/rrhh/departamentos",
+          name: "Cargos",
+          href: "/dashboard/rrhh/cargos",
         },
       ],
     },

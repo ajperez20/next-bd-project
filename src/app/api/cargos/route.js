@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server";
-import { employeeService } from "@/services/employeeService";
+import { cargoService } from "@/services/cargoService";
 
 export async function GET() {
   try {
-    const empleados = await employeeService.getAll();
-    return NextResponse.json(empleados);
+    const cargos = await cargoService.getAll();
+    return NextResponse.json(cargos);
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al obtener los empleados",
+          message: "Error al obtener los cargos",
           details: error.message,
         },
       },
@@ -22,16 +21,15 @@ export async function GET() {
 
 export async function POST(request) {
   try {
-    const empleado = await request.json();
-    const newEmpleado = await employeeService.create(empleado);
-    return NextResponse.json(newEmpleado, { status: 201 });
+    const cargo = await request.json();
+    const newCargo = await cargoService.create(cargo);
+    return NextResponse.json(newCargo, { status: 201 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al crear el empleado",
+          message: "Error al crear el cargo",
           details: error.message,
         },
       },

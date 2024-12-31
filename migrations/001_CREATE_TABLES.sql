@@ -148,7 +148,7 @@ CREATE TABLE AVION_COMPONENTE
 CREATE TABLE PRUEBA_CONF
 (
     prc_id              SERIAL PRIMARY KEY,
-    prc_tiempo_estimado INTERVAL    NOT NULL,
+    prc_tiempo_estimado INTERVAL     NOT NULL,
     prc_nombre_prueba   VARCHAR(255) NOT NULL
 );
 
@@ -831,6 +831,7 @@ CREATE TABLE EMPLEADO
     CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
             REFERENCES LUGAR (lug_id)
+            ON DELETE CASCADE
 );
 
 -- 4.2 Equipo Encargado
@@ -844,10 +845,12 @@ CREATE TABLE EQUIPO_ENCARGADO
         PRIMARY KEY (fk_zon_id, fk_per_id, eqc_id),
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_zon_id
         FOREIGN KEY (fk_zon_id)
             REFERENCES ZONA (zon_id)
+            ON DELETE CASCADE
 );
 
 -- 4.3 Experiencia
@@ -860,7 +863,8 @@ CREATE TABLE EXPERIENCIA
     fk_per_id          INT         NOT NULL,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT ck_fecha_fin
         CHECK (exp_fecha_fin > exp_fecha_inicio)
 );
@@ -889,10 +893,12 @@ CREATE TABLE PER_BEN
         PRIMARY KEY (fk_ben_id, fk_per_id),
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_ben_id
         FOREIGN KEY (fk_ben_id)
-            REFERENCES BENEFICIARIO (ben_id),
+            REFERENCES BENEFICIARIO (ben_id)
+            ON DELETE CASCADE,
     CONSTRAINT ck_parentezco
         CHECK (UPPER(prb_parentezco) in ('HERMAN@', 'PADRE', 'MADRE', 'OTRO'))
 );
@@ -917,10 +923,12 @@ CREATE TABLE EMPLEADO_TITULO
         PRIMARY KEY (fk_per_id, fk_tit_id),
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_tit_id
         FOREIGN KEY (fk_tit_id)
             REFERENCES TITULO (tit_id)
+            ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------
@@ -1125,10 +1133,12 @@ CREATE TABLE EMPLEADO_CARGO
         PRIMARY KEY (emc_id, fk_car_id, fk_per_id),
     CONSTRAINT fk_car_id
         FOREIGN KEY (fk_car_id)
-            REFERENCES CARGO (car_id),
+            REFERENCES CARGO (car_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT ck_fecha_fin
         CHECK (emc_fecha_inicio > emc_fecha_fin)
 );
@@ -1161,10 +1171,12 @@ CREATE TABLE EMP_CARGO_HORARIO
         PRIMARY KEY (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id),
     CONSTRAINT fk_empleado_cargo
         FOREIGN KEY (fk_per_id, fk_car_id, fk_emc_id)
-            REFERENCES EMPLEADO_CARGO (fk_per_id, fk_car_id, emc_id),
+            REFERENCES EMPLEADO_CARGO (fk_per_id, fk_car_id, emc_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_hor_id
         FOREIGN KEY (fk_hor_id)
             REFERENCES HORARIO (hor_id)
+            ON DELETE CASCADE
 );
 
 -- 7.5 Asistencia
@@ -1179,7 +1191,8 @@ CREATE TABLE ASISTENCIA
     fk_hor_id       INT                    NOT NULL,
     CONSTRAINT fk_ech
         FOREIGN KEY (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id)
-            REFERENCES EMP_CARGO_HORARIO (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id),
+            REFERENCES EMP_CARGO_HORARIO (fk_per_id, fk_car_id, fk_emc_id, fk_hor_id)
+            ON DELETE CASCADE,
     CONSTRAINT asi_hora_inicio
         CHECK (CAST(asi_hora_inicio AS TEXT) ~ '^(?:[0-1]?[0-9]|2[0-3]):[0-5][0-9]:00$'),
     CONSTRAINT asi_hora_fin
@@ -1187,6 +1200,7 @@ CREATE TABLE ASISTENCIA
     CONSTRAINT ck_asistencia
         CHECK (asi_hora_fin > asi_hora_inicio)
 );
+
 
 -- 7.6 Pago Nómina
 CREATE TABLE PAGO_NOMINA
@@ -1199,7 +1213,9 @@ CREATE TABLE PAGO_NOMINA
     CONSTRAINT fk_asi
         FOREIGN KEY (fk_asi)
             REFERENCES ASISTENCIA (asi_id)
+            ON DELETE CASCADE
 );
+
 
 --------------------------------------------------------------------------------
 -- 8. DATOS DE CONTACTO (REDES, TELÉFONO, CORREO)
@@ -1216,7 +1232,8 @@ CREATE TABLE RED_SOCIAL
     fk_ctn_id   INT,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id),
@@ -1240,7 +1257,8 @@ CREATE TABLE TELEFONO
     fk_ctn_id       INT,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id),
@@ -1267,7 +1285,8 @@ CREATE TABLE CORREO_ELECTRONICO
     fk_ctn_id      INT,
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id),
@@ -1337,7 +1356,8 @@ CREATE TABLE USUARIO
             REFERENCES ROL (rol_id),
     CONSTRAINT fk_per_id
         FOREIGN KEY (fk_per_id)
-            REFERENCES EMPLEADO (per_id),
+            REFERENCES EMPLEADO (per_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_cjd_id
         FOREIGN KEY (fk_cjd_id)
             REFERENCES CLIENTE_JURIDICO (cjd_id),
