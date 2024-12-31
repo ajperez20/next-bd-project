@@ -55,19 +55,17 @@ export default function NavBar() {
               >
                 <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <Menu.Item>
-                    {({ active }) => (
-                      <div className="px-4 py-2 text-xs text-gray-500">
-                        Privilegios:
-                        {user?.privileges?.map((priv, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 ml-2"
-                          >
-                            {priv.toLowerCase()}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <div className="px-4 py-2 text-xs text-gray-500">
+                      Privilegios:
+                      {user?.privileges?.map((priv, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 ml-2"
+                        >
+                          {priv.toLowerCase()}
+                        </span>
+                      ))}
+                    </div>
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (

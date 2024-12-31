@@ -1,3 +1,4 @@
+// src/components/EditModal.jsx
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
@@ -11,12 +12,15 @@ export default function EditModal({
   data,
   fields,
   title,
+  renderCustomField,
 }) {
   const [formData, setFormData] = useState(data || {});
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setFormData(data || {});
+    setErrors({});
   }, [data]);
 
   const handleSubmit = async (e) => {
@@ -24,6 +28,12 @@ export default function EditModal({
     setIsLoading(true);
     try {
       await onSave(formData);
+      setErrors({});
+    } catch (error) {
+      setErrors({
+        ...errors,
+        submit: error.message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -31,6 +41,12 @@ export default function EditModal({
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "number" ? (value === "" ? "" : Number(value)) : value,
@@ -38,6 +54,18 @@ export default function EditModal({
   };
 
   const renderField = (field) => {
+    // Si hay una función de renderizado personalizado y el campo es de tipo personalizado
+    if (
+      renderCustomField &&
+      (field.type === "caracteristicasPieza" ||
+        field.type === "materialesPieza" ||
+        field.type === "caracteristicasArray")
+    ) {
+      return renderCustomField(field, formData[field.name], (value) => {
+        handleChange({ target: { name: field.name, value } });
+      });
+    }
+
     switch (field.type) {
       case "select":
         return (
@@ -54,11 +82,8 @@ export default function EditModal({
               <option
                 key={option.value}
                 value={option.value}
-                className={`
-                                    ${option.level === 1 ? "font-semibold" : "font-normal"}
-                                `}
+                className={option.level ? `level-${option.level}` : ""}
               >
-                {/* Agregar indentación visual según el nivel */}
                 {option.level > 1 ? "├─ ".repeat(option.level - 1) : ""}
                 {option.label}
               </option>
@@ -78,18 +103,6 @@ export default function EditModal({
             placeholder={field.placeholder}
           />
         );
-      case "date":
-        return (
-          <input
-            type="date"
-            id={field.name}
-            name={field.name}
-            value={formData[field.name] || ""}
-            onChange={handleChange}
-            required={field.required}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-          />
-        );
       default:
         return (
           <input
@@ -104,6 +117,7 @@ export default function EditModal({
             min={field.min}
             max={field.max}
             step={field.step}
+            pattern={field.pattern}
           />
         );
     }
@@ -162,6 +176,11 @@ export default function EditModal({
                         )}
                       </label>
                       {renderField(field)}
+                      {errors[field.name] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[field.name]}
+                        </p>
+                      )}
                       {field.description && (
                         <p className="mt-1 text-xs text-gray-500">
                           {field.description}
@@ -169,6 +188,18 @@ export default function EditModal({
                       )}
                     </div>
                   ))}
+
+                  {errors.submit && (
+                    <div className="rounded-md bg-red-50 p-4">
+                      <div className="flex">
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-red-800">
+                            {errors.submit}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex justify-end space-x-3 mt-6 pt-4 border-t">
                     <button

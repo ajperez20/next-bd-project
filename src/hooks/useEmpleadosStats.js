@@ -49,7 +49,7 @@ export const useEmpleadosStats = () => {
         setStats((prev) => ({
           ...prev,
           isLoading: false,
-          error: "Error al cargar estadísticas de empleados",
+          error: error.message || "Error al cargar estadísticas de empleados",
         }));
       }
     };

@@ -7,6 +7,7 @@ import {
   HomeIcon,
   UserGroupIcon,
   CubeIcon,
+  CogIcon,
   BriefcaseIcon,
   TruckIcon,
   ClipboardDocumentListIcon,
@@ -57,21 +58,6 @@ const navigationConfig = {
       ],
     },
     {
-      name: "Producción",
-      href: "/dashboard/produccion",
-      icon: CubeIcon,
-    },
-    {
-      name: "Proveedores",
-      href: "/dashboard/proveedores",
-      icon: TruckIcon,
-    },
-    {
-      name: "Inventario",
-      href: "/dashboard/inventario",
-      icon: ClipboardDocumentListIcon,
-    },
-    {
       name: "Clientes",
       href: "/dashboard/clientes",
       icon: UserIcon,
@@ -83,6 +69,88 @@ const navigationConfig = {
         {
           name: "Jurídicos",
           href: "/dashboard/clientes/juridicos",
+        },
+        {
+          name: "Solicitudes",
+          href: "/dashboard/clientes/solicitudes",
+        },
+        {
+          name: "Seguimiento",
+          href: "/dashboard/clientes/seguimiento",
+        },
+      ],
+    },
+    {
+      name: "Proveedores",
+      href: "/dashboard/proveedores",
+      icon: TruckIcon,
+    },
+    {
+      name: "Configuración",
+      href: "/dashboard/configuracion",
+      icon: CogIcon,
+      submenu: [
+        {
+          name: "Tipos de Avión",
+          href: "/dashboard/configuracion/tipos-avion",
+        },
+        {
+          name: "Modelos",
+          href: "/dashboard/configuracion/modelos-avion",
+        },
+        {
+          name: "Piezas y Componentes",
+          href: "/dashboard/configuracion/piezas",
+        },
+        {
+          name: "Procesos de Ensamblaje",
+          href: "/dashboard/configuracion/procesos",
+        },
+      ],
+    },
+    {
+      name: "Producción",
+      href: "/dashboard/produccion",
+      icon: CubeIcon,
+      submenu: [
+        {
+          name: "Sedes y Plantas",
+          href: "/dashboard/produccion/sedes",
+        },
+        {
+          name: "Áreas y Zonas",
+          href: "/dashboard/produccion/areas",
+        },
+        {
+          name: "Ensamblaje de Aviones",
+          href: "/dashboard/produccion/ensamblaje",
+        },
+        {
+          name: "Control de Calidad y Pruebas",
+          href: "/dashboard/produccion/control-calidad",
+        },
+      ],
+    },
+    {
+      name: "Inventario",
+      href: "/dashboard/inventario",
+      icon: ClipboardDocumentListIcon,
+      submenu: [
+        {
+          name: "Materia Prima",
+          href: "/dashboard/inventario/materia-prima",
+        },
+        {
+          name: "Piezas",
+          href: "/dashboard/inventario/piezas",
+        },
+        {
+          name: "Stock",
+          href: "/dashboard/inventario/stock",
+        },
+        {
+          name: "Solicitudes entre Sedes",
+          href: "/dashboard/inventario/solicitudes",
         },
       ],
     },
@@ -106,11 +174,6 @@ const navigationConfig = {
   ],
   PROVEEDOR: [
     {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: HomeIcon,
-    },
-    {
       name: "Mis Pedidos",
       href: "/dashboard/pedidos",
       icon: ClipboardDocumentListIcon,
@@ -122,11 +185,6 @@ const navigationConfig = {
     },
   ],
   CLIENTE: [
-    {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: HomeIcon,
-    },
     {
       name: "Mis Pedidos",
       href: "/dashboard/pedidos",

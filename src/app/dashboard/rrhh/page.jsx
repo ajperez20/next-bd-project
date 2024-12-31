@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function RRHHPage() {
-  const { general, experiencia, calificaciones, beneficiarios, isLoading } =
+  const { general, experiencia, beneficiarios, isLoading } =
     useEmpleadosStats();
 
   if (isLoading) {

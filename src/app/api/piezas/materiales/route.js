@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
-import { useDashboardStatsService } from "@/services/stats/useDashboardStatsService";
+import { piezaService } from "@/services/piezaService";
 
 export async function GET() {
   try {
-    const stats = await useDashboardStatsService.getDashboardStats();
-    return NextResponse.json(stats);
+    const materiales = await piezaService.getMaterialesDisponibles();
+    return NextResponse.json(materiales);
   } catch (error) {
     return NextResponse.json(
       {
         error: {
           status: 500,
-          message: "Error al obtener estadísticas del dashboard",
+          message: "Error al obtener los materiales",
           details: error.message,
         },
       },
