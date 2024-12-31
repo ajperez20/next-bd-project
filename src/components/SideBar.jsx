@@ -36,6 +36,10 @@ const navigationConfig = {
           name: "Cargos",
           href: "/dashboard/rrhh/cargos",
         },
+        {
+          name: "Horarios",
+          href: "/dashboard/rrhh/cargos",
+        },
       ],
     },
     {
@@ -57,6 +61,16 @@ const navigationConfig = {
       name: "Clientes",
       href: "/dashboard/clientes",
       icon: UserIcon,
+      submenu: [
+        {
+          name: "Naturales",
+          href: "/dashboard/clientes/naturales",
+        },
+        {
+          name: "Juridicos",
+          href: "/dashboard/clientes/juridicos",
+        },
+      ],
     },
     {
       name: "Reportes",
@@ -74,11 +88,6 @@ const navigationConfig = {
       name: "Producción",
       href: "/dashboard/produccion",
       icon: CubeIcon,
-    },
-    {
-      name: "Mantenimiento",
-      href: "/dashboard/mantenimiento",
-      icon: WrenchScrewdriverIcon,
     },
   ],
   PROVEEDOR: [

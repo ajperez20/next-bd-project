@@ -820,18 +820,19 @@ CREATE TABLE AVION_CREADO
 CREATE TABLE EMPLEADO
 (
     per_id                 SERIAL PRIMARY KEY,
-    per_dni                NUMERIC(8, 0) NOT NULL UNIQUE,
+    per_dni                VARCHAR(50) NOT NULL UNIQUE,
     per_nombre             VARCHAR(30)   NOT NULL,
     per_apellido           VARCHAR(30)   NOT NULL,
     per_direccion          VARCHAR(70)   NOT NULL,
     per_experiencia        INT           NOT NULL,
     per_fecha_contratacion DATE          NOT NULL DEFAULT CURRENT_DATE,
-    per_profesion          VARCHAR(30)   NOT NULL,
+    per_profesion          VARCHAR(70)   NOT NULL,
     fk_lug_id              INT           NOT NULL,
     CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
-            REFERENCES LUGAR (lug_id)
-            ON DELETE CASCADE
+            REFERENCES LUGAR (lug_id),
+	CONSTRAINT ck_per_dni
+        CHECK (per_dni ~ '^[VEJP]{1}[0-9]{7,10}$')
 );
 
 -- 4.2 Equipo Encargado
@@ -950,7 +951,7 @@ CREATE TABLE CLIENTE_NATURAL
         FOREIGN KEY (fk_lug_id)
             REFERENCES LUGAR (lug_id),
     CONSTRAINT ck_ctn_dni
-        CHECK (ctn_dni ~ '^[VEJP]{1}[0-9]{9,10}$')
+        CHECK (ctn_dni ~ '^[VEJP]{1}[0-9]{7,10}$')
 );
 
 -- 5.2 Cliente Jurídico
@@ -1236,13 +1237,16 @@ CREATE TABLE RED_SOCIAL
             ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
-            REFERENCES PROVEEDOR (com_id),
+            REFERENCES PROVEEDOR (com_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_cjd_id
         FOREIGN KEY (fk_cjd_id)
-            REFERENCES CLIENTE_JURIDICO (cjd_id),
+            REFERENCES CLIENTE_JURIDICO (cjd_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_ctn_id
         FOREIGN KEY (fk_ctn_id)
             REFERENCES CLIENTE_NATURAL (ctn_id)
+            ON DELETE CASCADE
 );
 
 -- 8.2 Teléfono
@@ -1261,13 +1265,16 @@ CREATE TABLE TELEFONO
             ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
-            REFERENCES PROVEEDOR (com_id),
+            REFERENCES PROVEEDOR (com_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_cjd_id
         FOREIGN KEY (fk_cjd_id)
-            REFERENCES CLIENTE_JURIDICO (cjd_id),
+            REFERENCES CLIENTE_JURIDICO (cjd_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_ctn_id
         FOREIGN KEY (fk_ctn_id)
-            REFERENCES CLIENTE_NATURAL (ctn_id),
+            REFERENCES CLIENTE_NATURAL (ctn_id)
+            ON DELETE CASCADE,
     CONSTRAINT ck_codigo_area
         CHECK (tel_codigo_area ~ '^\+(?:[1-9]\d{0,2})$'),
     CONSTRAINT ck_telefono
@@ -1289,13 +1296,16 @@ CREATE TABLE CORREO_ELECTRONICO
             ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
-            REFERENCES PROVEEDOR (com_id),
+            REFERENCES PROVEEDOR (com_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_cjd_id
         FOREIGN KEY (fk_cjd_id)
-            REFERENCES CLIENTE_JURIDICO (cjd_id),
+            REFERENCES CLIENTE_JURIDICO (cjd_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_ctn_id
         FOREIGN KEY (fk_ctn_id)
-            REFERENCES CLIENTE_NATURAL (ctn_id),
+            REFERENCES CLIENTE_NATURAL (ctn_id)
+            ON DELETE CASCADE,
     CONSTRAINT ck_correo
         CHECK (cor_dir_correo ~ '^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
 );
@@ -1360,13 +1370,16 @@ CREATE TABLE USUARIO
             ON DELETE CASCADE,
     CONSTRAINT fk_cjd_id
         FOREIGN KEY (fk_cjd_id)
-            REFERENCES CLIENTE_JURIDICO (cjd_id),
+            REFERENCES CLIENTE_JURIDICO (cjd_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_ctn_id
         FOREIGN KEY (fk_ctn_id)
-            REFERENCES CLIENTE_NATURAL (ctn_id),
+            REFERENCES CLIENTE_NATURAL (ctn_id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_com_id
         FOREIGN KEY (fk_com_id)
             REFERENCES PROVEEDOR (com_id)
+            ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------

@@ -31,10 +31,10 @@ const initialFormFields = [
   {
     name: "per_dni",
     label: "DNI",
-    type: "number",
+    type: "text",
     required: true,
     placeholder: "Ingrese el DNI",
-    description: "Número de identificación del empleado",
+    description: "Número de identificación del empleado (V123456789)",
   },
   {
     name: "per_nombre",
