@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import DataList from "@/components/DataList";
 import EditModal from "@/components/EditModal";
+import EmpleadoDetalles from "@/components/empleados/EmpleadoDetalles";
 
 const columns = [
   { key: "per_dni", label: "DNI" },
@@ -88,6 +89,8 @@ export default function EmpleadosPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [formFields, setFormFields] = useState(initialFormFields);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedEmpleadoDetails, setSelectedEmpleadoDetails] = useState(null);
 
   useEffect(() => {
     fetchEmpleados();
@@ -151,6 +154,11 @@ export default function EmpleadosPage() {
       setSelectedEmpleado(null);
     }
     setShowModal(true);
+  };
+
+  const handleView = (empleado) => {
+    setSelectedEmpleadoDetails(empleado);
+    setShowDetails(true);
   };
 
   const handleDelete = async (empleado) => {
@@ -217,6 +225,7 @@ export default function EmpleadosPage() {
         columns={columns}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onView={handleView} // Agregar esta prop
         title="Gestión de Empleados"
       />
 
@@ -231,6 +240,17 @@ export default function EmpleadosPage() {
         fields={formFields}
         title="Empleado"
       />
+
+      {showDetails && (
+        <EmpleadoDetalles
+          isOpen={showDetails}
+          onClose={() => {
+            setShowDetails(false);
+            setSelectedEmpleadoDetails(null);
+          }}
+          empleado={selectedEmpleadoDetails}
+        />
+      )}
     </div>
   );
 }
