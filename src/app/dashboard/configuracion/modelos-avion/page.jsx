@@ -1,5 +1,6 @@
 "use client";
 
+import CaracteristicasArrayField from "@/components/aviones/CaracteristicasArrayField";
 import { useState, useEffect } from "react";
 import DataList from "@/components/DataList";
 import EditModal from "@/components/EditModal";
@@ -172,12 +173,9 @@ export default function ModelosAvionPage() {
     if (!confirm("¿Está seguro de eliminar este modelo?")) return;
 
     try {
-      const response = await fetch(
-        `/api/configuracion/modelos-avion/${modelo.id}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`/api/aviones/modelos/${modelo.id}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -226,6 +224,19 @@ export default function ModelosAvionPage() {
     );
   }
 
+  const renderCustomField = (field, value, onChange) => {
+    if (field.type === "caracteristicasArray") {
+      return (
+        <CaracteristicasArrayField
+          value={value}
+          onChange={onChange}
+          options={field.options}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-6">
       <DataList
@@ -246,6 +257,7 @@ export default function ModelosAvionPage() {
         data={currentModelo}
         fields={formFields}
         title="Modelo de Avión"
+        renderCustomField={renderCustomField}
       />
     </div>
   );
