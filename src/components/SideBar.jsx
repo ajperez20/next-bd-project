@@ -119,7 +119,7 @@ const navigationConfig = {
         },
         {
           name: "Áreas y Zonas",
-          href: "/dashboard/produccion/areas",
+          href: "/dashboard/produccion/areas-zonas",
         },
         {
           name: "Ensamblaje de Aviones",
@@ -139,10 +139,6 @@ const navigationConfig = {
         {
           name: "Materia Prima",
           href: "/dashboard/inventario/materia-prima",
-        },
-        {
-          name: "Piezas",
-          href: "/dashboard/inventario/piezas",
         },
         {
           name: "Stock",

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import DataList from "@/components/DataList";
 import EditModal from "@/components/EditModal";
+import { locationUtils } from "@/utils/locationUtils";
 
 const columns = [
   { key: "ctn_dni", label: "DNI" },
@@ -117,24 +118,9 @@ export default function ClientesNaturalesPage() {
 
   const fetchLugares = async () => {
     try {
-      const response = await fetch("/api/lugares");
-      if (!response.ok) throw new Error("Error al cargar lugares");
-      const lugares = await response.json();
-
-      setFormFields((currentFields) =>
-        currentFields.map((field) => {
-          if (field.name === "fk_lug_id") {
-            return {
-              ...field,
-              options: lugares.map((lugar) => ({
-                value: parseInt(lugar.lug_id),
-                label: lugar.lugar_completo,
-                level: lugar.level,
-              })),
-            };
-          }
-          return field;
-        }),
+      const lugares = await locationUtils.fetchLugares();
+      setFormFields((fields) =>
+        locationUtils.updateFormFieldsWithLocations(fields, lugares),
       );
     } catch (error) {
       console.error("Error:", error);

@@ -1,4 +1,3 @@
-// src/components/EditModal.jsx
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";

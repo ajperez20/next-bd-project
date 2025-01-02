@@ -94,8 +94,7 @@ VALUES
 ('AleadosYaracuy', 'Dirección 1 Yaracuy', 'www.aleadosyaracuy.com', 11, 23),       -- Yaracuy
 ('YaracuyAleaciones', 'Dirección 2 Yaracuy', 'www.yaracuyaleaciones.com', 12, 23), -- Yaracuy
 ('TitanioZulia', 'Dirección 1 Zulia', 'www.titaniozulia.com', 13, 24),             -- Zulia
-('ZuliaTitanium', 'Dirección 2 Zulia', 'www.zuliatitanium.com', 14, 24);           -- Zulia
-
+('ZuliaTitanium', 'Dirección 2 Zulia', 'www.zuliatitanium.com', 14, 24);          
 
 -- =================================================
 -- Inserción de datos: Redes Sociales de Proveedor

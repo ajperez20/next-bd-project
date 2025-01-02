@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import DataList from "@/components/DataList";
 import EditModal from "@/components/EditModal";
 import EmpleadoDetalles from "@/components/empleados/EmpleadoDetalles";
+import { locationUtils } from "@/utils/locationUtils";
 
 const columns = [
   { key: "per_dni", label: "DNI" },
@@ -112,24 +113,9 @@ export default function EmpleadosPage() {
 
   const fetchLugares = async () => {
     try {
-      const response = await fetch("/api/lugares");
-      if (!response.ok) throw new Error("Error al cargar lugares");
-      const data = await response.json();
-
-      setFormFields((currentFields) =>
-        currentFields.map((field) => {
-          if (field.name === "fk_lug_id") {
-            return {
-              ...field,
-              options: data.map((lugar) => ({
-                value: lugar.lug_id,
-                label: lugar.lugar_completo,
-                level: lugar.level,
-              })),
-            };
-          }
-          return field;
-        }),
+      const lugares = await locationUtils.fetchLugares();
+      setFormFields((fields) =>
+        locationUtils.updateFormFieldsWithLocations(fields, lugares),
       );
     } catch (error) {
       console.error("Error:", error);

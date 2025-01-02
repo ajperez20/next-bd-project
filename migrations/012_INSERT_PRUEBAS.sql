@@ -1,3 +1,5 @@
+--  CONFIGURACIÓN PRUEBAS
+
 -- =====================================
 -- Inserción de datos: PRUEBA_CONF
 -- ======================================
@@ -197,5 +199,104 @@ VALUES
 (15, 78), -- Prueba de carga de AU-747SilverB
 (16, 79), -- Prueba de vuelo de AU-87ABusiness
 (16, 80); -- Prueba de carga de AU-87ABusiness
+
+--  EJECUCIÓN PRUEBAS
+
+
+-- =====================================
+-- Inserción de datos: PRUEBA
+-- ======================================
+
+
+-- =====================================
+-- Inserción de datos: PRUEBA
+-- ======================================
+INSERT INTO PRUEBA (pru_nombre, pru_tiempo_estimado, pru_descripcion)
+VALUES 
+-- Pruebas para Modelos de Ala
+('Prueba de resistencia de Ala Recta', '2 hours', 'Evaluación de la resistencia estructural de alas rectas.'),
+('Prueba de aerodinámica de Ala Recta', '3 hours', 'Pruebas aerodinámicas en túneles de viento.'),
+('Prueba de resistencia de Ala Trapezoidal', '2 hours', 'Medición de la resistencia de alas trapezoidales.'),
+('Prueba de aerodinámica de Ala Trapezoidal', '3 hours', 'Evaluación del rendimiento aerodinámico de alas trapezoidales.'),
+('Prueba de resistencia de Ala Delta', '2 hours', 'Pruebas de resistencia estructural en alas delta.'),
+('Prueba de aerodinámica de Ala Delta', '3 hours', 'Simulación de flujo aerodinámico sobre alas delta.'),
+('Prueba de resistencia de Ala en Flecha', '2 hours', 'Análisis de resistencia en alas con diseño en flecha.'),
+('Prueba de aerodinámica de Ala en Flecha', '3 hours', 'Pruebas aerodinámicas avanzadas en alas en flecha.'),
+('Prueba de resistencia de Ala en Flecha Inversa', '2 hours', 'Pruebas estructurales en alas de flecha inversa.'),
+('Prueba de aerodinámica de Ala en Flecha Inversa', '3 hours', 'Evaluación aerodinámica de alas con flecha inversa.'),
+
+-- Pruebas para Modelos de Estabilizadores
+('Prueba de resistencia de Forma Estándar', '2 hours', 'Pruebas de resistencia en estabilizadores estándar.'),
+('Prueba de aerodinámica de Forma Estándar', '3 hours', 'Evaluación del flujo de aire sobre estabilizadores estándar.'),
+('Prueba de resistencia de Forma en T', '2 hours', 'Pruebas de resistencia en estabilizadores en forma de T.'),
+('Prueba de aerodinámica de Forma en T', '3 hours', 'Simulación de flujo aerodinámico en estabilizadores en T.'),
+('Prueba de resistencia de Forma en Cruz', '2 hours', 'Pruebas de resistencia en estabilizadores en forma de cruz.'),
+('Prueba de aerodinámica de Forma en Cruz', '3 hours', 'Evaluación del rendimiento aerodinámico de estabilizadores en cruz.'),
+('Prueba de resistencia de Forma 2 Verticales', '2 hours', 'Pruebas de resistencia en configuraciones con 2 estabilizadores verticales.'),
+('Prueba de aerodinámica de Forma 2 Verticales', '3 hours', 'Evaluación aerodinámica de configuraciones con 2 verticales.'),
+('Prueba de resistencia de Forma 3 Verticales', '2 hours', 'Pruebas de resistencia en configuraciones con 3 estabilizadores verticales.'),
+('Prueba de aerodinámica de Forma 3 Verticales', '3 hours', 'Evaluación aerodinámica de estabilizadores en 3 verticales.'),
+('Prueba de resistencia de Forma en V', '2 hours', 'Pruebas estructurales en estabilizadores en forma de V.'),
+('Prueba de aerodinámica de Forma en V', '3 hours', 'Evaluación aerodinámica en estabilizadores en forma de V.'),
+
+-- Pruebas para Modelos de Tren de Aterrizaje
+('Prueba de resistencia de Tren Fijo', '2 hours', 'Pruebas de resistencia estructural de trenes de aterrizaje fijos.'),
+('Prueba de funcionamiento de Tren Retráctil', '3 hours', 'Evaluación del mecanismo de retracción y extensión.'),
+
+-- Pruebas para Modelos de Sistemas de Control
+('Prueba de precisión de Anemómetro', '2 hours', 'Validación de precisión en mediciones de velocidad del aire.'),
+('Prueba de precisión de Altímetro', '2 hours', 'Validación de precisión en altímetros.'),
+('Prueba de precisión de Variómetro', '2 hours', 'Pruebas de precisión en indicación de velocidad vertical.'),
+('Prueba de precisión de Inclinómetro', '2 hours', 'Validación de inclinómetros para ángulos de inclinación.'),
+('Prueba de precisión de Horizonte Artificial', '2 hours', 'Validación de precisión en horizontes artificiales.'),
+('Prueba de precisión de Brújula', '2 hours', 'Pruebas de precisión en brújulas magnéticas.'),
+('Prueba de precisión de Indicador de Rumbos', '2 hours', 'Validación de precisión en indicadores de rumbo.'),
+('Prueba de precisión de ADF', '2 hours', 'Pruebas de precisión en equipos ADF.'),
+('Prueba de precisión de DME', '2 hours', 'Validación de medición de distancia en sistemas DME.'),
+('Prueba de precisión de CDI', '2 hours', 'Validación de precisión en desviación de curso.'),
+('Prueba de precisión de ILS', '2 hours', 'Pruebas de precisión en sistemas ILS.'),
+('Prueba de funcionamiento de Piloto Automático', '4 hours', 'Evaluación del funcionamiento de pilotos automáticos.'),
+
+-- Pruebas para Tipos de Elementos Internos
+('Prueba de comodidad de Asientos', '2 hours', 'Evaluación de la ergonomía y comodidad de los asientos.'),
+('Prueba de capacidad de Porta Equipajes', '2 hours', 'Validación de la capacidad máxima de carga en porta equipajes.'),
+('Prueba de resistencia de Alfombrado', '2 hours', 'Pruebas de resistencia al desgaste y carga en alfombrados.'),
+('Prueba de funcionamiento de Piezas Sanitarias', '2 hours', 'Verificación del correcto funcionamiento de las piezas sanitarias.'),
+('Prueba de visibilidad de Ventanillas', '2 hours', 'Evaluación de la claridad y resistencia de las ventanillas.'),
+('Prueba de durabilidad de Cortinas', '2 hours', 'Validación de la durabilidad y resistencia de las cortinas.'),
+
+-- Pruebas para Modelos de Avión
+('Prueba de vuelo de AU-80', '5 hours', 'Pruebas de vuelo completas para el modelo AU-80.'),
+('Prueba de carga de AU-80', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-80.'),
+('Prueba de vuelo de AU-801', '5 hours', 'Pruebas de vuelo completas para el modelo AU-801.'),
+('Prueba de carga de AU-801', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-801.'),
+('Prueba de vuelo de AU-802', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802.'),
+('Prueba de carga de AU-802', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802.'),
+('Prueba de vuelo de AU-747Plus', '6 hours', 'Pruebas de vuelo completas para el modelo AU-747Plus.'),
+('Prueba de carga de AU-747Plus', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-747Plus.'),
+('Prueba de vuelo de AU-87A', '6 hours', 'Pruebas de vuelo completas para el modelo AU-87A.'),
+('Prueba de carga de AU-87A', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-87A.'),
+('Prueba de vuelo de AU-802A', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802A.'),
+('Prueba de carga de AU-802A', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802A.'),
+('Prueba de vuelo de AU-802B', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802B.'),
+('Prueba de carga de AU-802B', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802B.'),
+('Prueba de vuelo de AU-802C', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802C.'),
+('Prueba de carga de AU-802C', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802C.'),
+('Prueba de vuelo de AU-802D', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802D.'),
+('Prueba de carga de AU-802D', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802D.'),
+('Prueba de vuelo de AU-802E', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802E.'),
+('Prueba de carga de AU-802E', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802E.'),
+('Prueba de vuelo de AU-802F', '5 hours', 'Pruebas de vuelo completas para el modelo AU-802F.'),
+('Prueba de carga de AU-802F', '4 hours', 'Evaluación de la capacidad de carga del modelo AU-802F.'),
+('Prueba de vuelo de AU-747Platinium', '6 hours', 'Pruebas de vuelo completas para el modelo AU-747Platinium.'),
+('Prueba de carga de AU-747Platinium', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-747Platinium.'),
+('Prueba de vuelo de AU-747Gold', '6 hours', 'Pruebas de vuelo completas para el modelo AU-747Gold.'),
+('Prueba de carga de AU-747Gold', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-747Gold.'),
+('Prueba de vuelo de AU-747Silver', '6 hours', 'Pruebas de vuelo completas para el modelo AU-747Silver.'),
+('Prueba de carga de AU-747Silver', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-747Silver.'),
+('Prueba de vuelo de AU-747SilverB', '6 hours', 'Pruebas de vuelo completas para el modelo AU-747SilverB.'),
+('Prueba de carga de AU-747SilverB', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-747SilverB.'),
+('Prueba de vuelo de AU-87ABusiness', '6 hours', 'Pruebas de vuelo completas para el modelo AU-87ABusiness.'),
+('Prueba de carga de AU-87ABusiness', '5 hours', 'Evaluación de la capacidad de carga del modelo AU-87ABusiness.');
 
 

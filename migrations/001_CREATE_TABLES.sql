@@ -874,14 +874,16 @@ CREATE TABLE EXPERIENCIA
 CREATE TABLE BENEFICIARIO
 (
     ben_id        SERIAL PRIMARY KEY,
-    ben_dni       NUMERIC(8, 0) NOT NULL UNIQUE,
+    ben_dni       VARCHAR(50) NOT NULL UNIQUE,
     ben_nombre    VARCHAR(30)   NOT NULL,
     ben_apellido  VARCHAR(30)   NOT NULL,
     ben_direccion VARCHAR(70)   NOT NULL,
     fk_lug_id     INT           NOT NULL,
     CONSTRAINT fk_lug_id
         FOREIGN KEY (fk_lug_id)
-            REFERENCES LUGAR (lug_id)
+            REFERENCES LUGAR (lug_id),
+	CONSTRAINT ck_ben_dni
+        CHECK (ben_dni ~ '^[VEJP]{1}[0-9]{7,10}$')
 );
 
 -- 4.5 Relación Persona-Beneficiario
@@ -908,7 +910,7 @@ CREATE TABLE PER_BEN
 CREATE TABLE TITULO
 (
     tit_id          SERIAL PRIMARY KEY,
-    tit_nombre      VARCHAR(30) NOT NULL,
+    tit_nombre      VARCHAR(70) NOT NULL,
     tit_descripcion VARCHAR(70) NOT NULL
 );
 
@@ -916,8 +918,8 @@ CREATE TABLE TITULO
 CREATE TABLE EMPLEADO_TITULO
 (
     edt_fecha_obtencion    DATE        NOT NULL,
-    edt_nombre_universidad VARCHAR(30) NOT NULL,
-    edt_descripcion        VARCHAR(50) NOT NULL,
+    edt_nombre_universidad VARCHAR(70) NOT NULL,
+    edt_descripcion        VARCHAR(255) NOT NULL,
     fk_tit_id              INT         NOT NULL,
     fk_per_id              INT         NOT NULL,
     CONSTRAINT pk_per_tit
@@ -931,6 +933,7 @@ CREATE TABLE EMPLEADO_TITULO
             REFERENCES TITULO (tit_id)
             ON DELETE CASCADE
 );
+
 
 --------------------------------------------------------------------------------
 -- 5. CLIENTES
